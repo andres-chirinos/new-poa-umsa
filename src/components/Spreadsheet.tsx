@@ -175,7 +175,7 @@ export function Spreadsheet() {
       }
 
       // 4. Save and Download
-      const blob = new Blob([finalPdfBytes], { type: "application/pdf" });
+      const blob = new Blob([finalPdfBytes as any], { type: "application/pdf" });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'POA_Completo.pdf';

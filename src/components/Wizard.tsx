@@ -319,16 +319,17 @@ export function Wizard() {
             },
             didParseCell: function(data) {
               if (data.section === 'body') {
-                const isTotalRow = data.row.raw[6] === "TOT. INGRESO" || data.row.raw[6] === "TOT. EGRESO";
+                const rawRow = data.row.raw as any[];
+                const isTotalRow = rawRow[6] === "TOT. INGRESO" || rawRow[6] === "TOT. EGRESO";
                 if (isTotalRow) {
                   data.cell.styles.fillColor = [240, 240, 240];
                   data.cell.styles.fontStyle = 'bold';
                 }
                 if (data.column.index === 1 || data.column.index === 7) {
-                  const tipo = data.row.raw[1];
-                  if (tipo === "Ingreso" || data.row.raw[6] === "TOT. INGRESO") {
+                  const tipo = rawRow[1];
+                  if (tipo === "Ingreso" || rawRow[6] === "TOT. INGRESO") {
                     data.cell.styles.textColor = [34, 139, 34]; // Verde
-                  } else if (tipo === "Egreso" || data.row.raw[6] === "TOT. EGRESO") {
+                  } else if (tipo === "Egreso" || rawRow[6] === "TOT. EGRESO") {
                     data.cell.styles.textColor = [204, 0, 0]; // Rojo
                   }
                 }
