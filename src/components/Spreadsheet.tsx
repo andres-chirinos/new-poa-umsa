@@ -77,7 +77,21 @@ export function Spreadsheet() {
   const updateMonth = (rowIndex: number, monthIndex: number, value: string) => {
     const newRows = [...rows];
     const newMeses = [...newRows[rowIndex].meses];
-    newMeses[monthIndex] = value;
+    const prevValue = newMeses[monthIndex];
+
+    let newValue = value;
+
+    // If previous value was "0" or empty, and a new character is typed, strip the leading "0"
+    if ((prevValue === "0" || prevValue === "") && newValue.length > 1 && newValue.startsWith("0") && newValue[1] !== ".") {
+      newValue = newValue.substring(1);
+    }
+
+    // If value is empty, revert to "0"
+    if (newValue === "") {
+      newValue = "0";
+    }
+
+    newMeses[monthIndex] = newValue;
     newRows[rowIndex] = { ...newRows[rowIndex], meses: newMeses };
     setRows(newRows);
   };
@@ -200,7 +214,7 @@ export function Spreadsheet() {
           </div>
           <div>
             <h2 className="text-lg font-bold text-primary">Matriz POA 2026-2027</h2>
-            <p className="text-xs text-slate-500 font-medium">Formato de Planificación y Presupuesto Institucional</p>
+            <p className="text-sm text-slate-500 font-medium">Formato de Planificación y Presupuesto Institucional</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -222,7 +236,7 @@ export function Spreadsheet() {
       {/* Strategic Framework Header Section */}
       <div className="bg-white p-4 border-b border-slate-200 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div>
-          <label className="block text-xs font-bold text-primary uppercase tracking-wider mb-1">PDES</label>
+          <label className="block text-sm font-bold text-primary uppercase tracking-wider mb-1">PDES</label>
           <select 
             className="w-full text-sm p-2 border border-slate-300 rounded bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             value={headerData.pdes}
@@ -233,7 +247,7 @@ export function Spreadsheet() {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-bold text-primary uppercase tracking-wider mb-1">PDU</label>
+          <label className="block text-sm font-bold text-primary uppercase tracking-wider mb-1">PDU</label>
           <select 
             className="w-full text-sm p-2 border border-slate-300 rounded bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             value={headerData.pdu}
@@ -244,7 +258,7 @@ export function Spreadsheet() {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-bold text-primary uppercase tracking-wider mb-1">PEI</label>
+          <label className="block text-sm font-bold text-primary uppercase tracking-wider mb-1">PEI</label>
           <select 
             className="w-full text-sm p-2 border border-slate-300 rounded bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             value={headerData.pei}
@@ -255,7 +269,7 @@ export function Spreadsheet() {
           </select>
         </div>
         <div>
-          <label className="block text-xs font-bold text-primary uppercase tracking-wider mb-1">ACP 2027</label>
+          <label className="block text-sm font-bold text-primary uppercase tracking-wider mb-1">ACP 2027</label>
           <select 
             className="w-full text-sm p-2 border border-slate-300 rounded bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary focus:border-primary outline-none"
             value={headerData.acp}
@@ -319,7 +333,7 @@ export function Spreadsheet() {
 
                     <td className="p-2 border-r border-slate-200 text-center font-medium">
                       <span className={cn(
-                        "px-2 py-1 rounded text-xs font-bold",
+                        "px-2 py-1 rounded text-sm font-bold",
                         row.tipo === "Meta" ? "bg-blue-100 text-primary" : "bg-red-100 text-secondary"
                       )}>
                         {row.tipo}

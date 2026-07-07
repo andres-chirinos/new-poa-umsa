@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import { DetalleFinanciero, RowData, ResultadoPrincipal } from "@/types/poa";
 import { Plus, Trash2, FileText } from "lucide-react";
 import partidasData from "@/partidas.json";
@@ -18,6 +19,285 @@ interface Props {
 }
 
 export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, addDetalle, removeDetalle, updateDetalle, handleExportPdf }: Props) {
+  // Navigation grid state: tracks active cell inside step 4 tables
+  const [activeCell, setActiveCell] = useState<{
+    resultId: string;
+    rowIndex: number;
+    colIndex: number;
+    isEditing: boolean;
+  } | null>(null);
+
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+
+  const getSuggestions = (query: string) => {
+    if (!query) return partidasData.slice(0, 10);
+    const cleaned = query.toLowerCase();
+    return partidasData
+      .filter((p: any) => 
+        p.PARTIDA.toString().toLowerCase().includes(cleaned) || 
+        p.DETALLE.toLowerCase().includes(cleaned)
+      )
+      .slice(0, 10);
+  };
+
+  // Auto-focus on adding a new detail row
+  const prevDetallesLengthRef = useRef(detalles.length);
+  const prevDetallesIdsRef = useRef(new Set(detalles.map(d => d.id)));
+
+  useEffect(() => {
+    if (detalles.length > prevDetallesLengthRef.current) {
+      // Find the newly added detail item
+      const newDetail = detalles.find(d => !prevDetallesIdsRef.current.has(d.id));
+      if (newDetail) {
+        // Find resDetalles for this result to calculate its row index
+        const resDetalles = detalles.filter(d => d.resultadoId === newDetail.resultadoId);
+        const rowIndex = resDetalles.findIndex(d => d.id === newDetail.id);
+        if (rowIndex !== -1) {
+          // Immediately set editing mode on the first editable column (Partida/Detalle)
+          setActiveCell({ resultId: newDetail.resultadoId, rowIndex, colIndex: 0, isEditing: true });
+          setTimeout(() => {
+            const el = document.getElementById(`input-detail-${newDetail.id}-1`);
+            if (el) {
+              el.focus();
+              if (el instanceof HTMLInputElement) el.select();
+            }
+          }, 50);
+        }
+      }
+    }
+    prevDetallesLengthRef.current = detalles.length;
+    prevDetallesIdsRef.current = new Set(detalles.map(d => d.id));
+  }, [detalles]);
+
+  // Focus a specific cell td in step 4 tables
+  const focusCell = (resultId: string, rowIndex: number, colIndex: number) => {
+    setActiveCell({ resultId, rowIndex, colIndex, isEditing: false });
+    setTimeout(() => {
+      const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
+      cellEl?.focus();
+    }, 0);
+  };
+
+  const handleCellFocus = (resultId: string, rowIndex: number, colIndex: number, isEditingState: boolean) => {
+    setActiveCell(prev => {
+      if (prev && prev.resultId === resultId && prev.rowIndex === rowIndex && prev.colIndex === colIndex && prev.isEditing === isEditingState) {
+        return prev;
+      }
+      return { resultId, rowIndex, colIndex, isEditing: isEditingState };
+    });
+  };
+
+  // Grid level keyboard navigation (similar to Step3Matriz)
+  const handleCellKeyDown = (
+    e: React.KeyboardEvent,
+    resultId: string,
+    rowIndex: number,
+    colIndex: number,
+    resDetalles: DetalleFinanciero[]
+  ) => {
+    if (activeCell?.isEditing) return;
+
+    switch (e.key) {
+      case "ArrowUp":
+        e.preventDefault();
+        if (rowIndex > 0) {
+          focusCell(resultId, rowIndex - 1, colIndex);
+        }
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        if (rowIndex < resDetalles.length - 1) {
+          focusCell(resultId, rowIndex + 1, colIndex);
+        }
+        break;
+      case "ArrowLeft":
+        e.preventDefault();
+        if (colIndex > 0) {
+          focusCell(resultId, rowIndex, colIndex - 1);
+        }
+        break;
+      case "ArrowRight":
+        e.preventDefault();
+        if (colIndex < 3) {
+          focusCell(resultId, rowIndex, colIndex + 1);
+        }
+        break;
+      case "Tab":
+        e.preventDefault();
+        if (e.shiftKey) {
+          if (colIndex > 0) {
+            focusCell(resultId, rowIndex, colIndex - 1);
+          } else if (rowIndex > 0) {
+            focusCell(resultId, rowIndex - 1, 3);
+          }
+        } else {
+          if (colIndex === 3 && rowIndex === resDetalles.length - 1) {
+            const btn = document.getElementById(`btn-add-detail-${resultId}`);
+            btn?.focus();
+            setActiveCell(null);
+          } else if (colIndex < 3) {
+            focusCell(resultId, rowIndex, colIndex + 1);
+          } else if (rowIndex < resDetalles.length - 1) {
+            focusCell(resultId, rowIndex + 1, 0);
+          }
+        }
+        break;
+      case "Enter":
+        e.preventDefault();
+        // Enter edit mode
+        setActiveCell({ resultId, rowIndex, colIndex, isEditing: true });
+        setTimeout(() => {
+          const detailId = resDetalles[rowIndex].id;
+          const inputEl = document.getElementById(`input-detail-${detailId}-${colIndex + 1}`);
+          if (inputEl) {
+            inputEl.focus();
+            if (inputEl instanceof HTMLInputElement) {
+              inputEl.select();
+            } else if (inputEl instanceof HTMLSelectElement && typeof (inputEl as any).showPicker === "function") {
+              try {
+                (inputEl as any).showPicker();
+              } catch (err) {
+                console.error("showPicker failed:", err);
+              }
+            }
+          }
+        }, 0);
+        break;
+    }
+  };
+
+  // Keyboard navigation when typing inside input fields
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent,
+    resultId: string,
+    rowIndex: number,
+    colIndex: number,
+    resDetalles: DetalleFinanciero[]
+  ) => {
+    // Suggestion navigation for Partida / Detalle input
+    if (colIndex === 0) {
+      const query = (e.target as HTMLInputElement).value;
+      const suggestions = getSuggestions(query);
+      
+      if (e.key === "ArrowDown") {
+        if (suggestions.length > 0) {
+          e.preventDefault();
+          setHighlightedIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : prev));
+          return;
+        }
+      } else if (e.key === "ArrowUp") {
+        if (suggestions.length > 0) {
+          e.preventDefault();
+          setHighlightedIndex(prev => (prev > 0 ? prev - 1 : -1));
+          return;
+        }
+      } else if (e.key === "Enter" && highlightedIndex >= 0) {
+        e.preventDefault();
+        const selected = suggestions[highlightedIndex];
+        if (selected) {
+          const optionVal = `${selected.PARTIDA} - ${selected.DETALLE}`;
+          updateDetalle(resDetalles[rowIndex].id, "detalle", optionVal);
+          updateDetalle(resDetalles[rowIndex].id, "partida", selected.PARTIDA.toString());
+        }
+        setHighlightedIndex(-1);
+        setActiveCell({ resultId, rowIndex, colIndex, isEditing: false });
+        setTimeout(() => {
+          const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
+          cellEl?.focus();
+        }, 0);
+        return;
+      }
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setActiveCell({ resultId, rowIndex, colIndex, isEditing: false });
+      setTimeout(() => {
+        const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
+        cellEl?.focus();
+        
+        // Excel behavior: move down one cell
+        setTimeout(() => {
+          if (rowIndex < resDetalles.length - 1) {
+            focusCell(resultId, rowIndex + 1, colIndex);
+          }
+        }, 0);
+      }, 0);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setActiveCell({ resultId, rowIndex, colIndex, isEditing: false });
+      setTimeout(() => {
+        const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
+        cellEl?.focus();
+      }, 0);
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      setActiveCell({ resultId, rowIndex, colIndex, isEditing: false });
+      setTimeout(() => {
+        const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
+        cellEl?.focus();
+        
+        setTimeout(() => {
+          if (e.shiftKey) {
+            if (colIndex > 0) {
+              focusCell(resultId, rowIndex, colIndex - 1);
+            } else if (rowIndex > 0) {
+              focusCell(resultId, rowIndex - 1, 3);
+            }
+          } else {
+            if (colIndex === 3 && rowIndex === resDetalles.length - 1) {
+              const btn = document.getElementById(`btn-add-detail-${resultId}`);
+              btn?.focus();
+              setActiveCell(null);
+            } else if (colIndex < 3) {
+              focusCell(resultId, rowIndex, colIndex + 1);
+            } else if (rowIndex < resDetalles.length - 1) {
+              focusCell(resultId, rowIndex + 1, 0);
+            }
+          }
+        }, 0);
+      }, 0);
+    }
+  };
+
+  const isCellActive = (targetResultId: string, rIdx: number, cIdx: number) => {
+    return !!(activeCell &&
+      activeCell.resultId === targetResultId &&
+      activeCell.rowIndex === rIdx &&
+      activeCell.colIndex === cIdx);
+  };
+
+  const handleAddButtonKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    resultId: string,
+    resDetalles: DetalleFinanciero[]
+  ) => {
+    if (e.key === "Tab" && e.shiftKey) {
+      if (resDetalles.length > 0) {
+        e.preventDefault();
+        focusCell(resultId, resDetalles.length - 1, 3);
+      }
+    }
+  };
+
+  const getCellClassName = (
+    targetResultId: string,
+    rIdx: number,
+    cIdx: number,
+    baseClass: string = ""
+  ) => {
+    const active = isCellActive(targetResultId, rIdx, cIdx);
+    const editing = active && activeCell?.isEditing;
+
+    return cn(
+      baseClass,
+      "relative transition-all focus:outline-none focus-visible:outline-none",
+      !active && "hover:bg-emerald-50 cursor-pointer transition-colors duration-100",
+      active && !editing && "ring-2 ring-inset ring-emerald-600 bg-emerald-50/40 z-10",
+      editing && "ring-2 ring-inset ring-emerald-500 bg-white z-10"
+    );
+  };
+
   return (
     <div className="w-full space-y-6">
       <datalist id="detalles-list">
@@ -68,7 +348,7 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
                     <div key={result.id} className="border border-slate-300 rounded-lg shadow-sm bg-white overflow-hidden">
                       <div className="bg-primary/5 border-b border-primary/20 px-4 py-3 flex justify-between items-center">
                         <h4 className="font-bold text-slate-700 flex items-center gap-2 text-sm">
-                          <span className="bg-slate-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
+                          <span className="bg-slate-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
                             {rpIndex + 1}.{riIndex + 1}
                           </span>
                           {resName}
@@ -107,56 +387,195 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
                                     <td className="p-0 border-r border-slate-200 text-center font-bold text-sm text-secondary">
                                       Gasto
                                     </td>
-                                    <td className="p-0 border-r border-slate-200">
+                                    
+                                    {/* Column 0: Partida / Detalle */}
+                                    <td
+                                      id={`cell-detail-${result.id}-${dIndex}-0`}
+                                      tabIndex={0}
+                                      onFocus={() => handleCellFocus(result.id, dIndex, 0, false)}
+                                      onKeyDown={(e) => handleCellKeyDown(e, result.id, dIndex, 0, resDetalles)}
+                                      onDoubleClick={() => {
+                                        setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 0, isEditing: true });
+                                        setTimeout(() => {
+                                          const el = document.getElementById(`input-detail-${detalle.id}-1`);
+                                          if (el) {
+                                            el.focus();
+                                            if (el instanceof HTMLInputElement) el.select();
+                                          }
+                                        }, 0);
+                                      }}
+                                      className={getCellClassName(result.id, dIndex, 0, "p-0 border-r border-slate-200 align-middle")}
+                                    >
                                       <input
+                                        id={`input-detail-${detalle.id}-1`}
+                                        tabIndex={-1}
                                         type="text"
-                                        list="detalles-list"
-                                        className="w-full h-full min-h-[40px] p-2 bg-transparent outline-none focus:bg-white focus:ring-1 focus:ring-inset focus:ring-primary text-sm uppercase"
+                                        className="w-full h-full min-h-[40px] p-2 bg-transparent outline-none border-0 focus:ring-0 focus:border-0 text-sm uppercase"
                                         value={detalle.detalle}
                                         placeholder="Ej: 21100 - COMUNICACIONES"
                                         onChange={(e) => {
                                           const val = e.target.value;
                                           updateDetalle(detalle.id, "detalle", val);
-                                          // Update partida to be empty or parse out the code if needed
                                           const partidaCode = val.split(" - ")[0];
                                           if (partidaCode && !isNaN(Number(partidaCode))) {
                                             updateDetalle(detalle.id, "partida", partidaCode);
                                           } else {
                                             updateDetalle(detalle.id, "partida", "");
                                           }
+                                          setHighlightedIndex(-1);
                                         }}
+                                        onFocus={(e) => {
+                                          e.stopPropagation();
+                                          setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 0, isEditing: true });
+                                        }}
+                                        onKeyDown={(e) => handleInputKeyDown(e, result.id, dIndex, 0, resDetalles)}
                                       />
+                                      {isCellActive(result.id, dIndex, 0) && activeCell?.isEditing && (
+                                        <div className="absolute left-0 top-full mt-1 w-full min-w-[280px] max-h-52 overflow-y-auto bg-white border border-slate-200 rounded-md shadow-xl z-50 divide-y divide-slate-100">
+                                          {getSuggestions(detalle.detalle).map((p: any, sIdx: number) => {
+                                            const optionVal = `${p.PARTIDA} - ${p.DETALLE}`;
+                                            const isHighlighted = sIdx === highlightedIndex;
+                                            return (
+                                              <div
+                                                key={p.PARTIDA}
+                                                className={cn(
+                                                  "px-3 py-2 text-left text-xs cursor-pointer transition-colors font-medium flex items-center",
+                                                  isHighlighted ? "bg-primary text-white font-bold" : "text-slate-700 hover:bg-slate-50"
+                                                )}
+                                                onMouseDown={(e) => {
+                                                  e.preventDefault();
+                                                  updateDetalle(detalle.id, "detalle", optionVal);
+                                                  updateDetalle(detalle.id, "partida", p.PARTIDA.toString());
+                                                  setHighlightedIndex(-1);
+                                                  setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 0, isEditing: false });
+                                                  setTimeout(() => {
+                                                    const cellEl = document.getElementById(`cell-detail-${result.id}-${dIndex}-0`);
+                                                    cellEl?.focus();
+                                                  }, 0);
+                                                }}
+                                              >
+                                                <span className={cn("font-mono font-bold mr-1.5 shrink-0", isHighlighted ? "text-white" : "text-primary")}>{p.PARTIDA}</span>
+                                                <span className="truncate">{p.DETALLE}</span>
+                                              </div>
+                                            );
+                                          })}
+                                          {getSuggestions(detalle.detalle).length === 0 && (
+                                            <div className="px-3 py-2.5 text-xs text-slate-400 italic text-center">
+                                              Sin coincidencias
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
                                     </td>
 
-                                    <td className="p-0 border-r border-slate-200">
+                                    {/* Column 1: Mes */}
+                                    <td
+                                      id={`cell-detail-${result.id}-${dIndex}-1`}
+                                      tabIndex={0}
+                                      onFocus={() => handleCellFocus(result.id, dIndex, 1, false)}
+                                      onKeyDown={(e) => handleCellKeyDown(e, result.id, dIndex, 1, resDetalles)}
+                                      onDoubleClick={() => {
+                                        setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 1, isEditing: true });
+                                        setTimeout(() => {
+                                          const el = document.getElementById(`input-detail-${detalle.id}-2`);
+                                          if (el) {
+                                            el.focus();
+                                            if (el instanceof HTMLSelectElement && typeof (el as any).showPicker === "function") {
+                                              try {
+                                                (el as any).showPicker();
+                                              } catch (err) {}
+                                            }
+                                          }
+                                        }, 0);
+                                      }}
+                                      className={getCellClassName(result.id, dIndex, 1, "p-0 border-r border-slate-200 align-middle")}
+                                    >
                                       <select 
-                                        className="w-full h-full p-2 border-none bg-transparent focus:ring-1 focus:ring-inset focus:ring-primary outline-none text-sm text-center"
+                                        id={`input-detail-${detalle.id}-2`}
+                                        tabIndex={-1}
+                                        className="w-full h-full min-h-[40px] p-2 border-none bg-transparent outline-none focus:ring-0 focus:border-0 text-sm text-center"
                                         value={detalle.mes}
                                         onChange={(e) => updateDetalle(detalle.id, "mes", e.target.value)}
+                                        onFocus={(e) => {
+                                          e.stopPropagation();
+                                          setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 1, isEditing: true });
+                                        }}
+                                        onKeyDown={(e) => handleInputKeyDown(e, result.id, dIndex, 1, resDetalles)}
                                       >
                                         {months.map(m => (
                                           <option key={m} value={m}>{m}</option>
                                         ))}
                                       </select>
                                     </td>
-                                    <td className="p-0 border-r border-slate-200">
+
+                                    {/* Column 2: Precio Unitario */}
+                                    <td
+                                      id={`cell-detail-${result.id}-${dIndex}-2`}
+                                      tabIndex={0}
+                                      onFocus={() => handleCellFocus(result.id, dIndex, 2, false)}
+                                      onKeyDown={(e) => handleCellKeyDown(e, result.id, dIndex, 2, resDetalles)}
+                                      onDoubleClick={() => {
+                                        setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 2, isEditing: true });
+                                        setTimeout(() => {
+                                          const el = document.getElementById(`input-detail-${detalle.id}-3`);
+                                          if (el) {
+                                            el.focus();
+                                            if (el instanceof HTMLInputElement) el.select();
+                                          }
+                                        }, 0);
+                                      }}
+                                      className={getCellClassName(result.id, dIndex, 2, "p-0 border-r border-slate-200 align-middle")}
+                                    >
                                       <input
+                                        id={`input-detail-${detalle.id}-3`}
+                                        tabIndex={-1}
                                         type="number"
-                                        className="w-full h-full p-2 text-right bg-transparent outline-none focus:bg-white focus:ring-1 focus:ring-inset focus:ring-primary text-sm font-medium"
+                                        className="w-full h-full min-h-[40px] p-2 text-right bg-transparent outline-none border-0 focus:ring-0 focus:border-0 text-sm font-medium"
                                         value={detalle.precioUnitario}
                                         placeholder="0.00"
                                         onChange={(e) => updateDetalle(detalle.id, "precioUnitario", e.target.value)}
+                                        onFocus={(e) => {
+                                          e.stopPropagation();
+                                          setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 2, isEditing: true });
+                                        }}
+                                        onKeyDown={(e) => handleInputKeyDown(e, result.id, dIndex, 2, resDetalles)}
                                       />
                                     </td>
-                                    <td className="p-0 border-r border-slate-200">
+
+                                    {/* Column 3: Cantidad */}
+                                    <td
+                                      id={`cell-detail-${result.id}-${dIndex}-3`}
+                                      tabIndex={0}
+                                      onFocus={() => handleCellFocus(result.id, dIndex, 3, false)}
+                                      onKeyDown={(e) => handleCellKeyDown(e, result.id, dIndex, 3, resDetalles)}
+                                      onDoubleClick={() => {
+                                        setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 3, isEditing: true });
+                                        setTimeout(() => {
+                                          const el = document.getElementById(`input-detail-${detalle.id}-4`);
+                                          if (el) {
+                                            el.focus();
+                                            if (el instanceof HTMLInputElement) el.select();
+                                          }
+                                        }, 0);
+                                      }}
+                                      className={getCellClassName(result.id, dIndex, 3, "p-0 border-r border-slate-200 align-middle")}
+                                    >
                                       <input
+                                        id={`input-detail-${detalle.id}-4`}
+                                        tabIndex={-1}
                                         type="number"
-                                        className="w-full h-full p-2 text-right bg-transparent outline-none focus:bg-white focus:ring-1 focus:ring-inset focus:ring-primary text-sm"
+                                        className="w-full h-full min-h-[40px] p-2 text-right bg-transparent outline-none border-0 focus:ring-0 focus:border-0 text-sm"
                                         value={detalle.cantidad}
                                         placeholder="0"
                                         onChange={(e) => updateDetalle(detalle.id, "cantidad", e.target.value)}
+                                        onFocus={(e) => {
+                                          e.stopPropagation();
+                                          setActiveCell({ resultId: result.id, rowIndex: dIndex, colIndex: 3, isEditing: true });
+                                        }}
+                                        onKeyDown={(e) => handleInputKeyDown(e, result.id, dIndex, 3, resDetalles)}
                                       />
                                     </td>
+
                                     <td className={`p-2 border-r border-slate-200 text-right font-bold text-sm ${isIngreso ? 'text-emerald-700 bg-emerald-50/30' : 'text-secondary bg-red-50/20'}`}>
                                       {montoTotal.toFixed(2)}
                                     </td>
@@ -204,7 +623,7 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
                                 <td></td>
                               </tr>
                               {isExceeded && (
-                                <tr className="bg-red-100 text-secondary text-xs text-right">
+                                <tr className="bg-red-100 text-secondary text-sm text-right">
                                   <td colSpan={8} className="p-2 font-bold">
                                     ⚠️ El total de gastos supera el presupuesto asignado para este resultado intermedio.
                                   </td>
@@ -217,7 +636,9 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
                       
                       <div className="p-3 bg-slate-50 border-t border-slate-300">
                         <button 
+                          id={`btn-add-detail-${result.id}`}
                           onClick={() => addDetalle(result.id)}
+                          onKeyDown={(e) => handleAddButtonKeyDown(e, result.id, resDetalles)}
                           className="flex items-center gap-2 bg-white text-secondary border border-secondary px-3 py-1.5 rounded-md hover:bg-secondary hover:text-white transition-colors text-sm font-bold shadow-sm"
                         >
                           <Plus className="w-4 h-4" /> Añadir Gasto
@@ -241,19 +662,19 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
             {resultadosPrincipales.map((rp, rpIndex) => {
               const rpRows = rows.filter(r => r.resultadoPrincipalId === rp.id);
               if (rpRows.length === 0) return null;
-              
+
               return (
                 <div key={rp.id}>
-                  <h4 className="text-xs font-bold text-slate-500 mb-2 uppercase">{rpIndex + 1}. {rp.resultado || "Resultado"}</h4>
+                  <h4 className="text-sm font-bold text-slate-500 mb-2 uppercase">{rpIndex + 1}. {rp.resultado || "Resultado"}</h4>
                   <div className="space-y-3">
                     {rpRows.map((row, riIndex) => {
                       const total = row.meses.reduce((acc, curr) => acc + (Number(curr) || 0), 0);
                       return (
-                        <div key={row.id} className="bg-white border border-slate-200 rounded p-2 text-xs shadow-sm">
+                        <div key={row.id} className="bg-white border border-slate-200 rounded p-2 text-sm shadow-sm">
                           <div className="font-bold text-primary mb-1">
                             {rpIndex + 1}.{riIndex + 1} {row.producto || "Sin definir"}
                           </div>
-                          <div className="grid grid-cols-6 gap-1 mt-2 text-center text-[10px]">
+                          <div className="grid grid-cols-6 gap-1 mt-2 text-center text-sm">
                             {months.map((m, idx) => {
                               const val = Number(row.meses[idx]) || 0;
                               return (
@@ -264,7 +685,7 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
                               );
                             })}
                           </div>
-                          <div className="mt-2 text-right text-[10px] font-bold text-slate-500">
+                          <div className="mt-2 text-right text-sm font-bold text-slate-500">
                             Total: {total}{row.tipo === "Porcentual" ? "%" : ""}
                           </div>
                         </div>
