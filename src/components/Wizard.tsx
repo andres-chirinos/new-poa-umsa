@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, ChevronLeft, Check, Save } from "lucide-react";
+import { ChevronRight, ChevronLeft, Check, Save, Download, ExternalLink, X, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -22,6 +22,8 @@ const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "
 
 export function Wizard() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+  const [showPdfModal, setShowPdfModal] = useState<boolean>(false);
   
   // Default values loaded from documentCENSO.pdf
   const [formData, setFormData] = useState<FormDataPOA>({
@@ -126,17 +128,30 @@ export function Wizard() {
   const updateMonth = (rowIndex: number, monthIndex: number, value: string) => {
     const newRows = [...rows];
     const newMeses = [...newRows[rowIndex].meses];
+    const prevValue = newMeses[monthIndex];
+
+    let newValue = value;
+
+    // If previous value was "0" or empty, and a new character is typed, strip the leading "0"
+    if ((prevValue === "0" || prevValue === "") && newValue.length > 1 && newValue.startsWith("0") && newValue[1] !== ".") {
+      newValue = newValue.substring(1);
+    }
+
+    // If value is empty, revert to "0"
+    if (newValue === "") {
+      newValue = "0";
+    }
     
-    let numericValue = Number(value) || 0;
+    let numericValue = Number(newValue) || 0;
     if (newRows[rowIndex].tipo === "Porcentual") {
       const sumWithoutCurrent = newMeses.reduce((acc, curr, idx) => acc + (idx === monthIndex ? 0 : Number(curr) || 0), 0);
       if (sumWithoutCurrent + numericValue > 100) {
         numericValue = 100 - sumWithoutCurrent;
-        value = numericValue.toString();
+        newValue = numericValue.toString();
       }
     }
 
-    newMeses[monthIndex] = value;
+    newMeses[monthIndex] = newValue;
     newRows[rowIndex].meses = newMeses;
     setRows(newRows);
   };
@@ -158,59 +173,126 @@ export function Wizard() {
   const handleExportPdf = () => {
     const doc = new jsPDF("landscape");
     
-    // Header
-    doc.setFontSize(16);
-    doc.setTextColor(0, 51, 102);
-    doc.text("UNIVERSIDAD MAYOR DE SAN ANDRÉS", 14, 15);
-    doc.setFontSize(12);
-    doc.text("Plan Operativo Anual (POA) 2026-2027", 14, 22);
+    // 1. Unified SIFU+ UMSA Document Header
+    autoTable(doc, {
+      startY: 12,
+      body: [
+        [
+          { 
+            content: "SIFU+\n(MODIFICADO)\n\nUMSA\nDIRECCIÓN ADM. FINANCIERA", 
+            rowSpan: 3, 
+            styles: { halign: 'center', valign: 'middle', fontStyle: 'bold', fontSize: 9, fillColor: [240, 244, 248], textColor: [0, 51, 102] } 
+          },
+          { content: "DIRECCIÓN: Rectorado / Administración Central", styles: { fontStyle: 'bold', fontSize: 8 } },
+          { content: "FACULTAD DE INGENIERÍA", styles: { fontSize: 8 }, colSpan: 2 }
+        ],
+        [
+          { content: "ACTIVIDAD/PROY: PLANIFICACIÓN Y PRESUPUESTO INSTITUCIONAL", styles: { fontStyle: 'bold', fontSize: 8 } },
+          { content: "ING.- CBAS - CURSO BÁSICO", styles: { fontSize: 8 }, colSpan: 2 },
+          { content: "30-031-101-00000000000000-033", styles: { halign: 'right', fontSize: 8 } }
+        ],
+        [
+          { content: "SUB ACTIVIDAD: Plan Operativo Anual (POA)", styles: { fontStyle: 'bold', fontSize: 8 } },
+          { content: "ING.- CBAS - CURSO BÁSICO", styles: { fontSize: 8 }, colSpan: 2 },
+          { content: "Gestión: 2026 - 2027", styles: { halign: 'right', fontStyle: 'bold', fontSize: 8 } }
+        ]
+      ],
+      theme: 'grid',
+      styles: { cellPadding: 2, lineColor: [100, 100, 100], lineWidth: 0.5 },
+      columnStyles: {
+        0: { cellWidth: 45 },
+        1: { cellWidth: 85 },
+        2: { cellWidth: 70 },
+        3: { cellWidth: 69 }
+      }
+    });
 
-    // Step 1 info
-    doc.setFontSize(10);
-    doc.setTextColor(50, 50, 50);
-    doc.setFont("helvetica", "bold");
-    doc.text("1. Articulación PEI-POA", 14, 32);
-    doc.setFont("helvetica", "normal");
-    doc.text(`PDES: ${formData.pdes || 'N/A'}`, 14, 38);
-    doc.text(`PDU: ${formData.pdu || 'N/A'}`, 14, 43);
-    doc.text(`PEI: ${formData.pei || 'N/A'}`, 14, 48);
+    let finalY = (doc as any).lastAutoTable.finalY + 6;
 
-    let finalY = 55;
+    // 2. DATOS GENERALES Section
+    autoTable(doc, {
+      startY: finalY,
+      body: [
+        [
+          { content: "DATOS GENERALES", colSpan: 2, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 225, 230], textColor: [30, 41, 59], fontSize: 9 } }
+        ],
+        [
+          { content: "Responsable: Gustavo Adolfo Gonzales Gomez", styles: { fontSize: 8 } },
+          { content: "Cargo Responsable: Director a.i.", styles: { fontSize: 8 } }
+        ]
+      ],
+      theme: 'grid',
+      styles: { cellPadding: 2, lineColor: [100, 100, 100], lineWidth: 0.5 },
+      columnStyles: {
+        0: { cellWidth: 135 },
+        1: { cellWidth: 134 }
+      }
+    });
+
+    finalY = (doc as any).lastAutoTable.finalY + 8;
 
     // Step 2, 3, 4 Hierarchical Print
     resultadosPrincipales.forEach((rp, rpIndex) => {
       if (finalY > 150) {
         doc.addPage();
-        finalY = 20;
+        finalY = 15;
       }
 
-      // Title: Resultado Principal
+      // Section title
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.setTextColor(0, 51, 102);
-      doc.text(`Resultado Principal ${rpIndex + 1}:`, 14, finalY);
       doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(50, 50, 50);
-      
-      const rpLines = doc.splitTextToSize(`${rp.resultado || 'N/A'}`, 260);
-      doc.text(rpLines, 14, finalY + 6);
-      finalY += 8 + (rpLines.length * 4);
+      doc.setTextColor(0, 51, 102);
+      doc.text(`ARTICULACIÓN PEI - POA - RESULTADO PRINCIPAL ${rpIndex + 1}`, 14, finalY);
+      finalY += 4;
 
-      doc.text(`ACP: ${rp.acp || 'N/A'} | Indicador: ${rp.indicador || 'N/A'}`, 14, finalY);
-      finalY += 8;
-
-      if (rp.objetivoGestion) {
-        doc.setFont("helvetica", "bold");
-        doc.text("Objetivo de Gestión:", 14, finalY);
-        doc.setFont("helvetica", "normal");
-        const objLines = doc.splitTextToSize(rp.objetivoGestion, 260);
-        doc.text(objLines, 14, finalY + 5);
-        finalY += 7 + (objLines.length * 4);
-      }
-
-      // Filter rows (Intermedios) for this RP
       const rpRows = rows.filter(r => r.resultadoPrincipalId === rp.id);
+      const rpBudgetTotal = rpRows.reduce((acc, curr) => acc + (Number(curr.presupuesto) || 0), 0);
+
+      // Articulación PEI - POA Table (Grid representation of Step 1 & 2 details)
+      autoTable(doc, {
+        startY: finalY,
+        head: [[
+          { content: "Código PEI", styles: { halign: 'center' } },
+          { content: "Acción Institucional (PEI)", styles: { halign: 'left' } },
+          { content: "Indicador Proceso", styles: { halign: 'left' } },
+          { content: "Área o Unidad", styles: { halign: 'left' } },
+          { content: "Código POA", styles: { halign: 'center' } },
+          { content: "Acción a Corto Plazo (ACP)", styles: { halign: 'left' } },
+          { content: "Resultado Esperado", styles: { halign: 'left' } },
+          { content: "Presupuesto (Bs)", styles: { halign: 'right' } }
+        ]],
+        body: [
+          [
+            "5.1.1.2 - 1.1.1",
+            formData.pei || 'Acciones de Mejora Continua',
+            rp.indicador || 'N/A',
+            "ING.- CBAS - CURSO BÁSICO",
+            `P30-303.${rpIndex + 1}`,
+            rp.acp || 'N/A',
+            rp.resultado || 'N/A',
+            { content: rpBudgetTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), styles: { halign: 'right', fontStyle: 'bold' } }
+          ],
+          [
+            { content: `Objetivo de Gestión: ${rp.objetivoGestion || 'N/A'}`, colSpan: 8, styles: { fontStyle: 'italic', fillColor: [248, 250, 252], textColor: [71, 85, 105] } }
+          ]
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [220, 225, 230], textColor: [30, 41, 59], fontStyle: 'bold', fontSize: 7.5 },
+        styles: { fontSize: 7, cellPadding: 2, lineColor: [100, 100, 100], lineWidth: 0.5 },
+        columnStyles: {
+          0: { cellWidth: 20 },
+          1: { cellWidth: 40 },
+          2: { cellWidth: 35 },
+          3: { cellWidth: 30 },
+          4: { cellWidth: 20 },
+          5: { cellWidth: 44 },
+          6: { cellWidth: 45 },
+          7: { cellWidth: 35 }
+        }
+      });
+
+      finalY = (doc as any).lastAutoTable.finalY + 6;
+
       if (rpRows.length > 0) {
         const calculateTotal = (meses: string[]) => meses.reduce((acc, curr) => acc + (Number(curr) || 0), 0);
 
@@ -225,8 +307,15 @@ export function Wizard() {
           ];
         });
 
+        if (finalY > 150) {
+          doc.addPage();
+          finalY = 15;
+        }
+
         doc.setFont("helvetica", "bold");
-        doc.text("Resultados Intermedios y Planificación:", 14, finalY);
+        doc.setFontSize(9);
+        doc.setTextColor(0, 51, 102);
+        doc.text("Resultados Intermedios y Planificación Mensual:", 14, finalY);
 
         autoTable(doc, {
           startY: finalY + 3,
@@ -420,7 +509,26 @@ export function Wizard() {
       doc.text(`GRAN TOTAL EGRESOS: Bs. ${granTotalEgresos.toFixed(2)}`, 14, finalY + 8);
     }
 
-    doc.save('Formulario_POA_UMSA.pdf');
+    const pdfBlob = doc.output('blob');
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    setPdfBlobUrl(blobUrl);
+    setShowPdfModal(true);
+  };
+
+  const handleDownloadPdf = () => {
+    if (!pdfBlobUrl) return;
+    const link = document.createElement('a');
+    link.href = pdfBlobUrl;
+    link.download = 'Formulario_POA_UMSA.pdf';
+    link.click();
+  };
+
+  const handleClosePdfModal = () => {
+    setShowPdfModal(false);
+    if (pdfBlobUrl) {
+      URL.revokeObjectURL(pdfBlobUrl);
+      setPdfBlobUrl(null);
+    }
   };
 
   return (
@@ -451,10 +559,10 @@ export function Wizard() {
                 {isCompleted ? <Check className="w-6 h-6" /> : step.id}
               </div>
               <div className="mt-2 text-center">
-                <p className={cn("font-bold text-xs", isActive ? "text-primary" : "text-slate-500")}>
+                <p className={cn("font-bold text-sm", isActive ? "text-primary" : "text-slate-500")}>
                   {step.title}
                 </p>
-                <p className="text-[10px] text-slate-400 hidden lg:block">{step.desc}</p>
+                <p className="text-sm text-slate-400 hidden lg:block">{step.desc}</p>
               </div>
             </div>
           );
@@ -527,6 +635,61 @@ export function Wizard() {
           </button>
         )}
       </div>
+
+      {/* PDF Preview Modal */}
+      {showPdfModal && pdfBlobUrl && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-[90vw] h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            
+            {/* Unified Header & Action Toolbar */}
+            <div className="bg-primary text-white px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-primary/20 shrink-0">
+              <div className="flex items-center gap-3">
+                <Eye className="w-6 h-6 text-white/90 shrink-0" />
+                <div>
+                  <h3 className="font-bold text-lg leading-tight font-serif">
+                    Vista Previa del POA (PDF)
+                  </h3>
+                  <p className="text-slate-200 text-xs mt-0.5">
+                    Revise el documento generado antes de guardarlo o imprimirlo.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Action Toolbar on the Right */}
+              <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+                <button
+                  onClick={handleDownloadPdf}
+                  className="bg-white text-primary hover:bg-white/90 font-bold px-4 py-2.5 rounded-lg text-sm shadow-sm transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+                >
+                  <Download className="w-4 h-4" /> Descargar PDF
+                </button>
+                <button
+                  onClick={() => window.open(pdfBlobUrl, "_blank")}
+                  className="bg-primary hover:bg-white/10 border border-white/30 text-white font-bold px-4 py-2.5 rounded-lg text-sm shadow-sm transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+                >
+                  <ExternalLink className="w-4 h-4" /> Ver en Pestaña Nueva
+                </button>
+                <button 
+                  onClick={handleClosePdfModal}
+                  className="text-white hover:bg-white/10 rounded-full p-2 transition-colors font-bold cursor-pointer ml-2 border border-transparent hover:border-white/20"
+                  title="Cerrar Vista Previa"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* PDF Viewer Body */}
+            <div className="flex-1 p-4 bg-slate-100 overflow-hidden">
+              <iframe 
+                src={pdfBlobUrl} 
+                className="w-full h-full border border-slate-300 rounded-lg bg-white shadow-inner"
+                title="Vista Previa de PDF POA UMSA"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
