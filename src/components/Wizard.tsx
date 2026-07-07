@@ -8,7 +8,7 @@ import autoTable from "jspdf-autotable";
 import { RowData, DetalleFinanciero, FormDataPOA, ResultadoPrincipal } from "@/types/poa";
 import { Step1Articulacion } from "./Step1Articulacion";
 import { Step2Programacion } from "./Step2Programacion";
-import { Step3Matriz } from "./Step3Matriz";
+import { Step3Matriz, resultadosEstandarizados } from "./Step3Matriz";
 import { Step4DetalleFinanciero } from "./Step4DetalleFinanciero";
 
 const pasos = [
@@ -41,21 +41,15 @@ export function Wizard() {
   ]);
 
   const [rows, setRows] = useState<RowData[]>([
-    { id: "1-M", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de informes de resultados del Censo Universitario presentados", indicador: "Informe con documento de respaldo", tipo: "Meta", meses: ["0", "0", "1", "0", "0", "1", "0", "0", "1", "0", "0", "0"] },
-    { id: "1-I", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de informes de resultados del Censo Universitario presentados", indicador: "Informe con documento de respaldo", tipo: "Ingresos", meses: Array(12).fill("0") },
-    { id: "1-E", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de informes de resultados del Censo Universitario presentados", indicador: "Informe con documento de respaldo", tipo: "Egresos", meses: Array(12).fill("0") },
-
-    { id: "2-M", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de Documentos Elaborados para la Publicación de resultados para ser enviado a las Autoridades", indicador: "Informe con documento de respaldo", tipo: "Meta", meses: ["0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0"] },
-    { id: "2-I", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de Documentos Elaborados para la Publicación de resultados para ser enviado a las Autoridades", indicador: "Informe con documento de respaldo", tipo: "Ingresos", meses: Array(12).fill("0") },
-    { id: "2-E", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de Documentos Elaborados para la Publicación de resultados para ser enviado a las Autoridades", indicador: "Informe con documento de respaldo", tipo: "Egresos", meses: Array(12).fill("0") },
-
-    { id: "3-M", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de Informes final de Censo Universitario", indicador: "Informe del responsable", tipo: "Meta", meses: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"] },
-    { id: "3-I", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de Informes final de Censo Universitario", indicador: "Informe del responsable", tipo: "Ingresos", meses: Array(12).fill("0") },
-    { id: "3-E", resultadoPrincipalId: "rp-censo", productoSelect: "Otro (Personalizado)", producto: "Nº de Informes final de Censo Universitario", indicador: "Informe del responsable", tipo: "Egresos", meses: Array(12).fill("0") },
+    { id: "1-M", resultadoPrincipalId: "rp-censo", isMandatory: true, productoSelect: "Otro (Personalizado)", producto: "Nº de informes de resultados del Censo Universitario presentados", indicador: "Informe con documento de respaldo", tipo: "Absoluto", meses: ["0", "0", "1", "0", "0", "1", "0", "0", "1", "0", "0", "0"], presupuesto: "0" },
+    { id: "2-M", resultadoPrincipalId: "rp-censo", isMandatory: true, productoSelect: "Otro (Personalizado)", producto: "Nº de Documentos Elaborados para la Publicación de resultados para ser enviado a las Autoridades", indicador: "Informe con documento de respaldo", tipo: "Absoluto", meses: ["0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0"], presupuesto: "0" },
+    { id: "3-M", resultadoPrincipalId: "rp-censo", isMandatory: true, productoSelect: "Otro (Personalizado)", producto: "Nº de Informes final de Censo Universitario", indicador: "Informe del responsable", tipo: "Absoluto", meses: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1"], presupuesto: "0" },
   ]);
 
   const [detalles, setDetalles] = useState<DetalleFinanciero[]>([
-    { id: "d1", resultadoId: "1-M", tipo: "Egreso", partida: "21100", detalle: "Material de Escritorio", mes: "Mar", precioUnitario: "150", cantidad: "10" }
+    { id: "d1", resultadoId: "1-M", tipo: "Egreso", partida: "", detalle: "", mes: "Ene", precioUnitario: "", cantidad: "" },
+    { id: "d2", resultadoId: "2-M", tipo: "Egreso", partida: "", detalle: "", mes: "Ene", precioUnitario: "", cantidad: "" },
+    { id: "d3", resultadoId: "3-M", tipo: "Egreso", partida: "", detalle: "", mes: "Ene", precioUnitario: "", cantidad: "" }
   ]);
 
   const updateFormData = (field: string, value: string) => {
@@ -90,18 +84,18 @@ export function Wizard() {
     const newId = Date.now().toString();
     setRows([
       ...rows,
-      { id: newId + "-M", resultadoPrincipalId, productoSelect: "", producto: "", indicador: "", tipo: "Meta", meses: Array(12).fill("") },
-      { id: newId + "-I", resultadoPrincipalId, productoSelect: "", producto: "", indicador: "", tipo: "Ingresos", meses: Array(12).fill("") },
-      { id: newId + "-E", resultadoPrincipalId, productoSelect: "", producto: "", indicador: "", tipo: "Egresos", meses: Array(12).fill("") }
+      { id: newId + "-M", resultadoPrincipalId, productoSelect: "", producto: "", indicador: "", tipo: "Absoluto", meses: Array(12).fill(""), presupuesto: "" }
+    ]);
+    setDetalles(prev => [
+      ...prev,
+      { id: "d-" + newId, resultadoId: newId + "-M", tipo: "Egreso", partida: "", detalle: "", mes: "Ene", precioUnitario: "", cantidad: "" }
     ]);
   };
 
   const removeRowGroup = (absoluteIndex: number) => {
-    const baseIndex = Math.floor(absoluteIndex / 3) * 3;
-    const baseId = rows[baseIndex].id;
-    
+    const baseId = rows[absoluteIndex].id;
     const newRows = [...rows];
-    newRows.splice(baseIndex, 3);
+    newRows.splice(absoluteIndex, 1);
     setRows(newRows);
 
     setDetalles(prev => prev.filter(g => g.resultadoId !== baseId));
@@ -109,27 +103,22 @@ export function Wizard() {
 
   const updateRow = (absoluteIndex: number, field: keyof RowData, value: string) => {
     const newRows = [...rows];
-    const baseIndex = Math.floor(absoluteIndex / 3) * 3;
     
     if (field === "productoSelect") {
-      newRows[baseIndex].productoSelect = value;
-      newRows[baseIndex + 1].productoSelect = value;
-      newRows[baseIndex + 2].productoSelect = value;
+      newRows[absoluteIndex].productoSelect = value;
+      const match = resultadosEstandarizados.find(r => r.nombre === value);
       if (value !== "Otro (Personalizado)") {
-        newRows[baseIndex].producto = value;
-        newRows[baseIndex + 1].producto = value;
-        newRows[baseIndex + 2].producto = value;
+        newRows[absoluteIndex].producto = value;
+        if (match) {
+          newRows[absoluteIndex].tipo = match.tipo as any;
+          newRows[absoluteIndex].indicador = match.indicador;
+        }
       } else {
-        newRows[baseIndex].producto = "";
-        newRows[baseIndex + 1].producto = "";
-        newRows[baseIndex + 2].producto = "";
+        newRows[absoluteIndex].producto = "";
+        newRows[absoluteIndex].indicador = "";
       }
-    } else if (field === "producto" || field === "indicador") {
-      newRows[baseIndex][field] = value;
-      newRows[baseIndex + 1][field] = value;
-      newRows[baseIndex + 2][field] = value;
     } else {
-      newRows[absoluteIndex][field] = value as any;
+      (newRows[absoluteIndex] as any)[field] = value;
     }
     setRows(newRows);
   };
@@ -137,6 +126,16 @@ export function Wizard() {
   const updateMonth = (rowIndex: number, monthIndex: number, value: string) => {
     const newRows = [...rows];
     const newMeses = [...newRows[rowIndex].meses];
+    
+    let numericValue = Number(value) || 0;
+    if (newRows[rowIndex].tipo === "Porcentual") {
+      const sumWithoutCurrent = newMeses.reduce((acc, curr, idx) => acc + (idx === monthIndex ? 0 : Number(curr) || 0), 0);
+      if (sumWithoutCurrent + numericValue > 100) {
+        numericValue = 100 - sumWithoutCurrent;
+        value = numericValue.toString();
+      }
+    }
+
     newMeses[monthIndex] = value;
     newRows[rowIndex].meses = newMeses;
     setRows(newRows);
@@ -216,13 +215,10 @@ export function Wizard() {
         const calculateTotal = (meses: string[]) => meses.reduce((acc, curr) => acc + (Number(curr) || 0), 0);
 
         const tableData = rpRows.map((row, index) => {
-          const isFirstInGroup = index % 3 === 0;
-          const groupNum = Math.floor(index / 3) + 1;
-          
           return [
-            isFirstInGroup ? `${rpIndex + 1}.${groupNum}` : "",
-            isFirstInGroup ? row.producto : "",
-            isFirstInGroup ? row.indicador : "",
+            `${rpIndex + 1}.${index + 1}`,
+            row.producto,
+            row.indicador,
             row.tipo,
             ...row.meses.map(m => m ? m : '0'),
             calculateTotal(row.meses).toString()
@@ -247,13 +243,7 @@ export function Wizard() {
           },
           didParseCell: function(data) {
               if (data.section === 'body' && data.column.index === 3) {
-                  if (data.cell.raw === 'Ingresos') {
-                      data.cell.styles.textColor = [34, 139, 34];
-                  } else if (data.cell.raw === 'Egresos') {
-                      data.cell.styles.textColor = [204, 0, 0];
-                  } else {
-                      data.cell.styles.textColor = [0, 51, 102];
-                  }
+                  data.cell.styles.textColor = [0, 51, 102];
               }
           },
           didDrawPage: (data) => {
@@ -265,7 +255,7 @@ export function Wizard() {
       }
 
       // Detalle Financiero for this RP
-      const uniqueIntermediateRows = rpRows.filter(r => r.tipo === "Meta");
+      const uniqueIntermediateRows = rpRows;
       
       uniqueIntermediateRows.forEach((ri, riIndex) => {
         const riDetalles = detalles.filter(d => d.resultadoId === ri.id);
@@ -288,7 +278,6 @@ export function Wizard() {
             return [
               (i + 1).toString(),
               d.tipo,
-              d.partida,
               d.detalle,
               d.mes,
               pUnit.toFixed(2),
@@ -300,12 +289,12 @@ export function Wizard() {
           const resTotalIngresos = riDetalles.filter(d => d.tipo === "Ingreso").reduce((acc, d) => acc + ((Number(d.precioUnitario) || 0) * (Number(d.cantidad) || 0)), 0);
           const resTotalEgresos = riDetalles.filter(d => d.tipo === "Egreso").reduce((acc, d) => acc + ((Number(d.precioUnitario) || 0) * (Number(d.cantidad) || 0)), 0);
           
-          if (resTotalIngresos > 0) detallesTableData.push(["", "", "", "", "", "", "TOT. INGRESO", resTotalIngresos.toFixed(2)]);
-          if (resTotalEgresos > 0) detallesTableData.push(["", "", "", "", "", "", "TOT. EGRESO", resTotalEgresos.toFixed(2)]);
+          if (resTotalIngresos > 0) detallesTableData.push(["", "", "", "", "", "TOT. INGRESO", resTotalIngresos.toFixed(2)]);
+          if (resTotalEgresos > 0) detallesTableData.push(["", "", "", "", "", "TOT. EGRESO", resTotalEgresos.toFixed(2)]);
 
           autoTable(doc, {
             startY: finalY + 4,
-            head: [['N°', 'Tipo', 'Partida/Rubro', 'Detalle', 'Mes', 'P. Unitario (Bs)', 'Cantidad', 'Monto Total (Bs)']],
+            head: [['N°', 'Tipo', 'Partida / Detalle', 'Mes', 'P. Unitario (Bs)', 'Cantidad', 'Monto Total (Bs)']],
             body: detallesTableData,
             theme: 'grid',
             headStyles: { fillColor: [50, 50, 50], textColor: 255 },
@@ -313,14 +302,14 @@ export function Wizard() {
             columnStyles: {
               0: { cellWidth: 10, halign: 'center' },
               1: { cellWidth: 18, fontStyle: 'bold' },
+              4: { halign: 'right' },
               5: { halign: 'right' },
-              6: { halign: 'right' },
-              7: { halign: 'right', fontStyle: 'bold' }
+              6: { halign: 'right', fontStyle: 'bold' }
             },
             didParseCell: function(data) {
               if (data.section === 'body') {
                 const rawRow = data.row.raw as any[];
-                const isTotalRow = rawRow[6] === "TOT. INGRESO" || rawRow[6] === "TOT. EGRESO";
+                const isTotalRow = rawRow[5] === "TOT. INGRESO" || rawRow[5] === "TOT. EGRESO";
                 if (isTotalRow) {
                   data.cell.styles.fillColor = [240, 240, 240];
                   data.cell.styles.fontStyle = 'bold';
@@ -346,6 +335,71 @@ export function Wizard() {
 
       finalY += 10;
     });
+
+    // Print Asignación Presupuestaria Global
+    if (rows.length > 0) {
+      if (finalY > 150) {
+        doc.addPage();
+        finalY = 20;
+      }
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.setTextColor(34, 139, 34); // Emerald
+      doc.text("Asignación Presupuestaria Global", 14, finalY);
+
+      const presupuestoTableData = rows.map((row, index) => {
+        const rpIndex = resultadosPrincipales.findIndex(rp => rp.id === row.resultadoPrincipalId);
+        const rpRows = rows.filter(r => r.resultadoPrincipalId === row.resultadoPrincipalId);
+        const relativeIndex = rpRows.findIndex(r => r.id === row.id);
+        const rpName = resultadosPrincipales[rpIndex]?.resultado || `Resultado Principal ${rpIndex + 1}`;
+        
+        return [
+          `${rpIndex + 1}.${relativeIndex + 1}`,
+          rpName,
+          row.producto || `Resultado Intermedio (Sin definir)`,
+          Number(row.presupuesto || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        ];
+      });
+
+      const totalPresupuesto = rows.reduce((acc, r) => acc + (Number(r.presupuesto) || 0), 0);
+      const techoCarrera = 1200000;
+      const restante = techoCarrera - totalPresupuesto;
+
+      presupuestoTableData.push(["", "", "TOTAL ASIGNADO:", totalPresupuesto.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })]);
+      presupuestoTableData.push(["", "", "PRESUPUESTO RESTANTE:", restante.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })]);
+
+      autoTable(doc, {
+        startY: finalY + 4,
+        head: [['N°', 'Resultado Principal', 'Resultado Intermedio', 'Presupuesto (Bs)']],
+        body: presupuestoTableData,
+        theme: 'grid',
+        headStyles: { fillColor: [6, 78, 59], textColor: 255 },
+        styles: { fontSize: 8, cellPadding: 2, valign: 'middle' },
+        columnStyles: {
+          0: { cellWidth: 15, halign: 'center' },
+          1: { cellWidth: 80 },
+          2: { cellWidth: 60 },
+          3: { halign: 'right', fontStyle: 'bold' }
+        },
+        didParseCell: function(data) {
+          if (data.section === 'body') {
+            const rawRow = data.row.raw as any[];
+            if (rawRow[2] === "TOTAL ASIGNADO:" || rawRow[2] === "PRESUPUESTO RESTANTE:") {
+              data.cell.styles.fillColor = [240, 240, 240];
+              data.cell.styles.fontStyle = 'bold';
+              if (rawRow[2] === "PRESUPUESTO RESTANTE:" && restante < 0) {
+                data.cell.styles.textColor = [204, 0, 0];
+              }
+            }
+          }
+        },
+        didDrawPage: (data) => {
+          finalY = data.cursor ? data.cursor.y : finalY;
+        }
+      });
+
+      finalY = (doc as any).lastAutoTable.finalY + 12;
+    }
 
     // Gran Totals
     const granTotalIngresos = detalles.filter(d => d.tipo === "Ingreso").reduce((acc, d) => acc + ((Number(d.precioUnitario) || 0) * (Number(d.cantidad) || 0)), 0);

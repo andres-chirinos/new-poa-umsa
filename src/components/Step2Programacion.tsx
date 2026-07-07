@@ -29,7 +29,6 @@ export function Step2Programacion({ resultadosPrincipales, addResultadoPrincipal
               <th className="p-2 border-r border-primary/20 font-semibold w-64 text-left">Acción de Corto Plazo (ACP)</th>
               <th className="p-2 border-r border-primary/20 font-semibold text-left">Resultado Principal Esperado</th>
               <th className="p-2 border-r border-primary/20 font-semibold w-64 text-left">Indicador Principal</th>
-              <th className="p-2 font-semibold w-12 text-center">Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -40,49 +39,26 @@ export function Step2Programacion({ resultadosPrincipales, addResultadoPrincipal
                     {index + 1}
                   </td>
                   <td className="p-2 border-r border-slate-200 align-top">
-                    <select 
-                      className="w-full p-2 border border-slate-300 rounded focus:ring-1 focus:ring-primary outline-none text-xs uppercase"
-                      value={res.acp}
-                      onChange={(e) => updateResultadoPrincipal(res.id, "acp", e.target.value)}
-                    >
-                      <option value="">Seleccione ACP...</option>
-                      <option value="AE1: FORMACIÓN PROFESIONAL">AE1: FORMACIÓN PROFESIONAL</option>
-                      <option value="AE2: INVESTIGACIÓN E INNOVACIÓN">AE2: INVESTIGACIÓN E INNOVACIÓN</option>
-                      <option value="AE3: INTERACCIÓN SOCIAL Y EXTENSIÓN">AE3: INTERACCIÓN SOCIAL Y EXTENSIÓN</option>
-                      <option value="AE4: GESTIÓN INSTITUCIONAL">AE4: GESTIÓN INSTITUCIONAL</option>
-                    </select>
+                    <div className="w-full p-2 border border-slate-200 rounded bg-slate-100 text-sm uppercase text-slate-600">
+                      {res.acp}
+                    </div>
                   </td>
                   <td className="p-2 border-r border-slate-200 align-top">
-                    <textarea 
-                      className="w-full min-h-[60px] p-2 border border-slate-300 rounded resize-none focus:ring-1 focus:ring-primary outline-none text-xs"
-                      placeholder="Ej: Mantener el 100% de cumplimiento..."
-                      value={res.resultado}
-                      onChange={(e) => updateResultadoPrincipal(res.id, "resultado", e.target.value)}
-                    />
+                    <div className="w-full min-h-[60px] p-2 border border-slate-200 rounded bg-slate-100 text-sm text-slate-600">
+                      {res.resultado}
+                    </div>
                   </td>
                   <td className="p-2 border-r border-slate-200 align-top">
-                    <textarea 
-                      className="w-full min-h-[60px] p-2 border border-slate-300 rounded resize-none focus:ring-1 focus:ring-primary outline-none text-xs"
-                      placeholder="Ej: N° de Operaciones y actividades..."
-                      value={res.indicador}
-                      onChange={(e) => updateResultadoPrincipal(res.id, "indicador", e.target.value)}
-                    />
-                  </td>
-                  <td className="p-2 text-center align-middle" rowSpan={2}>
-                    <button 
-                      onClick={() => removeResultadoPrincipal(res.id)}
-                      className="text-secondary hover:text-red-800 hover:bg-red-50 p-2 rounded-full transition-colors"
-                      title="Eliminar Resultado"
-                    >
-                      <Trash2 className="w-5 h-5 mx-auto" />
-                    </button>
+                    <div className="w-full min-h-[60px] p-2 border border-slate-200 rounded bg-slate-100 text-sm text-slate-600">
+                      {res.indicador}
+                    </div>
                   </td>
                 </tr>
                 <tr className="border-b-4 border-slate-300 bg-slate-50/50">
-                  <td colSpan={3} className="p-3 border-r border-slate-200">
+                  <td colSpan={4} className="p-3 border-r border-slate-200">
                     <label className="block text-[11px] font-bold text-slate-500 mb-1">OBJETIVO DE GESTIÓN ASOCIADO AL PROYECTO</label>
                     <textarea 
-                      className="w-full min-h-[60px] p-2 border border-slate-300 rounded resize-none focus:ring-1 focus:ring-primary outline-none text-xs text-slate-700"
+                      className="w-full min-h-[60px] p-2 border border-slate-300 rounded resize-none focus:ring-1 focus:ring-primary outline-none text-sm text-slate-700"
                       placeholder="Describa el objetivo de gestión y propósito de este resultado principal..."
                       value={res.objetivoGestion}
                       onChange={(e) => updateResultadoPrincipal(res.id, "objetivoGestion", e.target.value)}
@@ -93,14 +69,6 @@ export function Step2Programacion({ resultadosPrincipales, addResultadoPrincipal
             ))}
           </tbody>
         </table>
-        <div className="p-3 bg-slate-50 border-t border-slate-300">
-          <button 
-            onClick={addResultadoPrincipal}
-            className="flex items-center gap-2 bg-white text-primary border border-primary px-4 py-2 rounded-md hover:bg-primary hover:text-white transition-colors text-sm font-bold shadow-sm"
-          >
-            <Plus className="w-4 h-4" /> Agregar Resultado Principal
-          </button>
-        </div>
       </div>
     </div>
   );

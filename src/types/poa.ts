@@ -12,8 +12,10 @@ export interface RowData {
   productoSelect: string;
   producto: string;
   indicador: string;
-  tipo: "Meta" | "Ingresos" | "Egresos";
+  tipo: "Absoluto" | "Porcentual";
   meses: string[]; // 12 months
+  presupuesto?: string;
+  isMandatory?: boolean;
 }
 
 export interface DetalleFinanciero {

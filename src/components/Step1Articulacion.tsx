@@ -17,11 +17,10 @@ export function Step1Articulacion({ formData, updateFormData }: Props) {
             Plan de Desarrollo Económico y Social (PDES)
           </label>
           <select 
-            className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+            className="w-full p-3 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 appearance-none outline-none cursor-not-allowed"
             value={formData.pdes}
-            onChange={(e) => updateFormData("pdes", e.target.value)}
+            disabled
           >
-            <option value="">Seleccione PDES...</option>
             <option value="Eje 7">Eje 7: Educación, Investigación, Ciencia y Tecnología</option>
           </select>
         </div>
@@ -30,11 +29,10 @@ export function Step1Articulacion({ formData, updateFormData }: Props) {
             Plan de Desarrollo Universitario (PDU)
           </label>
           <select 
-            className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+            className="w-full p-3 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 appearance-none outline-none cursor-not-allowed"
             value={formData.pdu}
-            onChange={(e) => updateFormData("pdu", e.target.value)}
+            disabled
           >
-            <option value="">Seleccione PDU...</option>
             <option value="1. Formación Profesional">1. Formación Profesional</option>
             <option value="2. Investigación Científica">2. Investigación Científica</option>
           </select>
@@ -44,11 +42,10 @@ export function Step1Articulacion({ formData, updateFormData }: Props) {
             Plan Estratégico Institucional (PEI)
           </label>
           <select 
-            className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+            className="w-full p-3 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 appearance-none outline-none cursor-not-allowed"
             value={formData.pei}
-            onChange={(e) => updateFormData("pei", e.target.value)}
+            disabled
           >
-            <option value="">Seleccione PEI...</option>
             <option value="192 - Acciones de Mejora Continua">192 - Acciones de Mejora Continua</option>
           </select>
         </div>

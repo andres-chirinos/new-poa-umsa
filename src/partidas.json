@@ -1,0 +1,2022 @@
+[
+  {
+    "PARTIDA": 51700,
+    "DETALLE": "Acciones y Participaciones de Capital en Empresas Públicas Internacionales"
+  },
+  {
+    "PARTIDA": 51800,
+    "DETALLE": "Otras Acc. y Partic. de Cap. en el Exterior"
+  },
+  {
+    "PARTIDA": 52000,
+    "DETALLE": "Concesión de Prestamos a CP al Sec. Pub. no Finan."
+  },
+  {
+    "PARTIDA": 52100,
+    "DETALLE": "Concesión de Préstamos a CP a los Órganos del Estado Plurinacional"
+  },
+  {
+    "PARTIDA": 52200,
+    "DETALLE": "Concesión de Prestamos a CP a Inst. Pub. Descent."
+  },
+  {
+    "PARTIDA": 52400,
+    "DETALLE": "Concesión de Prestamos a corto Plazo a Entidades Territoriales Autónomas"
+  },
+  {
+    "PARTIDA": 52410,
+    "DETALLE": "Concesión de Préstamos a Corto Plazo Gobierno Autónomo  Departamental"
+  },
+  {
+    "PARTIDA": 52420,
+    "DETALLE": "Concesión de Préstamos a Corto Plazo Gobierno Autónomo Municipal"
+  },
+  {
+    "PARTIDA": 52430,
+    "DETALLE": "Concesión de Préstamos a Corto Plazo Gobierno Indígena Originario Campesino"
+  },
+  {
+    "PARTIDA": 52600,
+    "DETALLE": "Concesión de Prestamos a CP a Inst. de Seg. Social"
+  },
+  {
+    "PARTIDA": 52700,
+    "DETALLE": "Concesión de Prestamos a CP a Emp.Pub. Nales"
+  },
+  {
+    "PARTIDA": 52800,
+    "DETALLE": "Concesión de Préstamos a Corto Plazo a Empresas Públicas Territoriales"
+  },
+  {
+    "PARTIDA": 52810,
+    "DETALLE": " Del Gobierno Autónomo Departamental"
+  },
+  {
+    "PARTIDA": 52820,
+    "DETALLE": " Del Gobierno Autónomo Municipal"
+  },
+  {
+    "PARTIDA": 52830,
+    "DETALLE": " Del Gobierno Autonomo Indígena Originario Campesino"
+  },
+  {
+    "PARTIDA": 52900,
+    "DETALLE": "Conc.de Prest.a CP a Emp.Pub.no Fin.de los Gob Mun"
+  },
+  {
+    "PARTIDA": 53000,
+    "DETALLE": "Concesión de Pr?stamos a LP al Sect.PSb.no Fina"
+  },
+  {
+    "PARTIDA": 53100,
+    "DETALLE": "Concesión de Prestamos a LP a los organos del Estado Plurinacional"
+  },
+  {
+    "PARTIDA": 53200,
+    "DETALLE": "Concesión de Prestamos a LP a Inst. Pub. Descent."
+  },
+  {
+    "PARTIDA": 53400,
+    "DETALLE": "Concesión de Préstamos a Largo Plazo a Entidades Territoriales Autónomas"
+  },
+  {
+    "PARTIDA": 53410,
+    "DETALLE": "Gobierno Autónomo Departamental"
+  },
+  {
+    "PARTIDA": 53420,
+    "DETALLE": " Gobierno Autónomo Municipal"
+  },
+  {
+    "PARTIDA": 53430,
+    "DETALLE": " Gobierno Autonomo Indígena Originario Campesino"
+  },
+  {
+    "PARTIDA": 53500,
+    "DETALLE": "Concesión de Prestamos a LP a Gob. Municipales"
+  },
+  {
+    "PARTIDA": 53600,
+    "DETALLE": "Concesión de Prestamos a LP a Inst. de Seg. Social"
+  },
+  {
+    "PARTIDA": 53700,
+    "DETALLE": "Concesión de Prestamos a LP a Emp.Pub. Nales"
+  },
+  {
+    "PARTIDA": 53810,
+    "DETALLE": " Del Gobierno Autónomo Departamental"
+  },
+  {
+    "PARTIDA": 53820,
+    "DETALLE": " Del Gobierno Autónomo Municipal"
+  },
+  {
+    "PARTIDA": 53830,
+    "DETALLE": "Del Gobierno Autonomo Indígena Originario Campesino"
+  },
+  {
+    "PARTIDA": 53900,
+    "DETALLE": "Coc.de Presatamos a LPa Emp.Pub.no Fin.Municipales"
+  },
+  {
+    "PARTIDA": 54000,
+    "DETALLE": "Conc.de Prest.al Sect.Pub.Fin.y a los Sec.Pri.y Exterior"
+  },
+  {
+    "PARTIDA": 54100,
+    "DETALLE": "Conc.de Prest. a CP a Inst.Pub.Fin.no Bancarias"
+  },
+  {
+    "PARTIDA": 54200,
+    "DETALLE": "Conc.de Prest. a CP a Inst.Pub.Fin Bancarias"
+  },
+  {
+    "PARTIDA": 54300,
+    "DETALLE": "Concesión de Prestamos a CP al Sector Privado"
+  },
+  {
+    "PARTIDA": 54400,
+    "DETALLE": "Concesión de Prestamos a C.P. al Exterior"
+  },
+  {
+    "PARTIDA": 54500,
+    "DETALLE": "Colocaciones de Fondos en Fideicomiso"
+  },
+  {
+    "PARTIDA": 54600,
+    "DETALLE": "Conc. de Prest.a LP a Inst.Pub.Fin.no Bancarias"
+  },
+  {
+    "PARTIDA": 54700,
+    "DETALLE": "Conc. de Prest.a LP a Inst.Pub.Fin. Bancarias"
+  },
+  {
+    "PARTIDA": 54800,
+    "DETALLE": "Conc. de Prest.a LP al Sector Privado"
+  },
+  {
+    "PARTIDA": 54900,
+    "DETALLE": "Conc. de Prest.a LP al Sector Exterior"
+  },
+  {
+    "PARTIDA": 55000,
+    "DETALLE": "Compra de Titulos y Valores"
+  },
+  {
+    "PARTIDA": 55100,
+    "DETALLE": "Titulos y Valores a CP"
+  },
+  {
+    "PARTIDA": 55110,
+    "DETALLE": "Letras del tesoro"
+  },
+  {
+    "PARTIDA": 55120,
+    "DETALLE": "Bonos del tesoro"
+  },
+  {
+    "PARTIDA": 55130,
+    "DETALLE": "Otros"
+  },
+  {
+    "PARTIDA": 55200,
+    "DETALLE": "Titulos y Valores a LP"
+  },
+  {
+    "PARTIDA": 55210,
+    "DETALLE": "Letras del tesoro"
+  },
+  {
+    "PARTIDA": 55220,
+    "DETALLE": "Bonos del tesoro"
+  },
+  {
+    "PARTIDA": 55230,
+    "DETALLE": "Otros"
+  },
+  {
+    "PARTIDA": 56000,
+    "DETALLE": "Constitución de Fideicomisos y Servicios Financieros"
+  },
+  {
+    "PARTIDA": 56100,
+    "DETALLE": "Colocación de Fondos en Fideicomiso"
+  },
+  {
+    "PARTIDA": 56200,
+    "DETALLE": "Concesiones de Recursos de Fideicomisos"
+  },
+  {
+    "PARTIDA": 57000,
+    "DETALLE": "Incremento de Disponibilidades"
+  },
+  {
+    "PARTIDA": 57100,
+    "DETALLE": "Incremento de Caja y Bancos"
+  },
+  {
+    "PARTIDA": 57200,
+    "DETALLE": "Incremento de Inversiones Temporales"
+  },
+  {
+    "PARTIDA": 58000,
+    "DETALLE": "Incremento de Ctas y Doctos. por Cobrar y Ot.Ac.Fi"
+  },
+  {
+    "PARTIDA": 58100,
+    "DETALLE": "Incremento de Cuentas por Cobrar a Corto Plazo"
+  },
+  {
+    "PARTIDA": 58200,
+    "DETALLE": "Incremento de Doctos.por Cobrar y Ot.Ac.Fin.a C.P."
+  },
+  {
+    "PARTIDA": 58210,
+    "DETALLE": "Incremento de Doc.xcobrar a corto plazo"
+  },
+  {
+    "PARTIDA": 58220,
+    "DETALLE": "Incremento de otros activos financieros a corto plazo"
+  },
+  {
+    "PARTIDA": 58300,
+    "DETALLE": "Incremento de Cuentas por Cobrar a Largo Plazo"
+  },
+  {
+    "PARTIDA": 58400,
+    "DETALLE": "Incremento de Doctos por Cobrar y Otr.Ac.Fin.LP"
+  },
+  {
+    "PARTIDA": 58410,
+    "DETALLE": "Incrementos de documentos por cobrar a largo plazo"
+  },
+  {
+    "PARTIDA": 58420,
+    "DETALLE": "Incremento de otros activos financieros a LP"
+  },
+  {
+    "PARTIDA": 59000,
+    "DETALLE": "Afectaciones al tesoro general de la nación"
+  },
+  {
+    "PARTIDA": 59100,
+    "DETALLE": "Afectaciones al Tesoro General de la Nación"
+  },
+  {
+    "PARTIDA": 60000,
+    "DETALLE": "SERVICIO DE LA DEUDA PUBLICA Y DISM. DE OTROS PAS."
+  },
+  {
+    "PARTIDA": 61000,
+    "DETALLE": "Servicio de la Deuda Publica Interna"
+  },
+  {
+    "PARTIDA": 61100,
+    "DETALLE": "Amortizac. de la Deuda Publica Interna a CP"
+  },
+  {
+    "PARTIDA": 61200,
+    "DETALLE": "Intereses de la Deuda Publica Interna a CP"
+  },
+  {
+    "PARTIDA": 61300,
+    "DETALLE": "Comisiones y Otros Gastos de la Deuda Pub.Int.a CP"
+  },
+  {
+    "PARTIDA": 61400,
+    "DETALLE": "Intereses por Mora y Multas de Deuda Pub.Int.a CP"
+  },
+  {
+    "PARTIDA": 61600,
+    "DETALLE": "Amortización de la Deuda Publica Interna a LP"
+  },
+  {
+    "PARTIDA": 61700,
+    "DETALLE": "Intereses de la Deuda Publica Interna a LP"
+  },
+  {
+    "PARTIDA": 61800,
+    "DETALLE": "Comisiones y Otros Gastos de la Deuda Pub.Int.a LP"
+  },
+  {
+    "PARTIDA": 61900,
+    "DETALLE": "Intereses por Mora y Multas de Deuda Pub.Int.a LP"
+  },
+  {
+    "PARTIDA": 62000,
+    "DETALLE": "Servicio de la Deuda Publica Externa"
+  },
+  {
+    "PARTIDA": 62100,
+    "DETALLE": "Amortización de la Deuda Pub. Externa a CP"
+  },
+  {
+    "PARTIDA": 62200,
+    "DETALLE": "Intereses de la Deuda Pub.Ext. a CP"
+  },
+  {
+    "PARTIDA": 62300,
+    "DETALLE": "Comisiones y Otros Gastos de la Deuda Pub.Ext a CP"
+  },
+  {
+    "PARTIDA": 62400,
+    "DETALLE": "Intereses por Mora y Multas de Deuda Pub. Ext a CP"
+  },
+  {
+    "PARTIDA": 62600,
+    "DETALLE": "Amortización de la Deuda Pub.Ext. a LP"
+  },
+  {
+    "PARTIDA": 62700,
+    "DETALLE": "Intereses de la Deuda Pub. Ext. a LP"
+  },
+  {
+    "PARTIDA": 62800,
+    "DETALLE": "Comisiones y Otros Gastos de la Deuda Pub.Ext a LP"
+  },
+  {
+    "PARTIDA": 62900,
+    "DETALLE": "Intereses por Mora y Multas de Deuda Pub. Ext a LP"
+  },
+  {
+    "PARTIDA": 63000,
+    "DETALLE": "Disminución de Cuentas a Pagar a CP"
+  },
+  {
+    "PARTIDA": 63100,
+    "DETALLE": "Disminución de Cuentas por Pagar a CP por deudas Comerciales con proveedores"
+  },
+  {
+    "PARTIDA": 63200,
+    "DETALLE": "Dismin. de Cuentas por Pagar a CP con Contratistas"
+  },
+  {
+    "PARTIDA": 63300,
+    "DETALLE": "Dismin. de Cuentas por Pagar por CP por Sueldos y Jorn"
+  },
+  {
+    "PARTIDA": 63400,
+    "DETALLE": "Dismin. de Cuentas por Pagar a CP por Aportes Patron"
+  },
+  {
+    "PARTIDA": 63500,
+    "DETALLE": "Dismin. de Cuentas por Pagar a CP por Retenciones"
+  },
+  {
+    "PARTIDA": 63600,
+    "DETALLE": "Dis.de Ctas.por Pag.CP por Imp,Regal y Tasas"
+  },
+  {
+    "PARTIDA": 63700,
+    "DETALLE": "Dism. de Ctas por Pag.CP por Jubilaciones y Pension"
+  },
+  {
+    "PARTIDA": 63800,
+    "DETALLE": "Dism. de Ctas a Pagar a CP por Intereses"
+  },
+  {
+    "PARTIDA": 63900,
+    "DETALLE": "Dism. de Otros Pasivos y Otras Ctas.por Pagar C.P."
+  },
+  {
+    "PARTIDA": 64000,
+    "DETALLE": "Disminución de Ctas por Pagar a Largo Plazo"
+  },
+  {
+    "PARTIDA": 64100,
+    "DETALLE": "Dism. de Ctas. a Pagar a LP por Deudas Comerciales"
+  },
+  {
+    "PARTIDA": 64200,
+    "DETALLE": "Disminución de Otras Cuentas por Pagar a LP"
+  },
+  {
+    "PARTIDA": 65000,
+    "DETALLE": "Gastos Devengados No Pagados - TGN"
+  },
+  {
+    "PARTIDA": 65100,
+    "DETALLE": "Gastos Devengados no Pagados por Servicios Person."
+  },
+  {
+    "PARTIDA": 65200,
+    "DETALLE": "Gastos Devengados no Pagados por Serv. no Personal"
+  },
+  {
+    "PARTIDA": 65300,
+    "DETALLE": "Gastos Devengados no Pag. por transferencias"
+  },
+  {
+    "PARTIDA": 65400,
+    "DETALLE": "Gastos Devengados no Pag. por Retenciones"
+  },
+  {
+    "PARTIDA": 65500,
+    "DETALLE": "Gastos Devengados no Pag. por Intereses Deuda Publica Interna"
+  },
+  {
+    "PARTIDA": 65600,
+    "DETALLE": "Gastos Devengados no Pag. por Serv.de la Deuda Pub. Externa"
+  },
+  {
+    "PARTIDA": 65700,
+    "DETALLE": "Gastos Devengados no Pag. por Comisiones Deuda Publica Interna"
+  },
+  {
+    "PARTIDA": 65800,
+    "DETALLE": "Gastos Devengados no Pag. por Comisiones Deuda publica Externa"
+  },
+  {
+    "PARTIDA": 65900,
+    "DETALLE": "Otros Gastos Devengados no Pagados"
+  },
+  {
+    "PARTIDA": 66000,
+    "DETALLE": "Gastos Devengados No Pagados - Otras Fuentes"
+  },
+  {
+    "PARTIDA": 66100,
+    "DETALLE": "Gastos Devengados No Pagados por Servicios Personales"
+  },
+  {
+    "PARTIDA": 66200,
+    "DETALLE": "Gastos Dev. No Pagados por Serv. No Pers., Mat. y Suministros, Activos Reales y Fin. y Serv.Deuda"
+  },
+  {
+    "PARTIDA": 66210,
+    "DETALLE": "Gastos Devengados No Pagados por Servicios No Personales"
+  },
+  {
+    "PARTIDA": 66220,
+    "DETALLE": "Gastos Devengados No Pagados por Materiales y Suministros"
+  },
+  {
+    "PARTIDA": 66230,
+    "DETALLE": "Gastos Devengados No Pagados por Activos Reales"
+  },
+  {
+    "PARTIDA": 66300,
+    "DETALLE": "Gastos Devengados No Pagados por Transferencias"
+  },
+  {
+    "PARTIDA": 66400,
+    "DETALLE": "Gastos Devengados No Pagados por Retenciones"
+  },
+  {
+    "PARTIDA": 66900,
+    "DETALLE": "Otros Gastos No Pagados"
+  },
+  {
+    "PARTIDA": 67000,
+    "DETALLE": "Obligaciones por afectaciones al TGN"
+  },
+  {
+    "PARTIDA": 67100,
+    "DETALLE": "Obligaciones por afectaciones al TGN"
+  },
+  {
+    "PARTIDA": 68000,
+    "DETALLE": "Dism. de Otros Pasivos"
+  },
+  {
+    "PARTIDA": 68200,
+    "DETALLE": "Pago de Beneficios Sociales"
+  },
+  {
+    "PARTIDA": 69000,
+    "DETALLE": "Devolución de Fondos en Fideicomiso"
+  },
+  {
+    "PARTIDA": 69100,
+    "DETALLE": "Devolución de Fondos - Fideicomiso de Corto Plazo"
+  },
+  {
+    "PARTIDA": 69200,
+    "DETALLE": "Devolución de Fondos - Fideicomiso de Largo Plazo"
+  },
+  {
+    "PARTIDA": 70000,
+    "DETALLE": "TRANSFERENCIAS"
+  },
+  {
+    "PARTIDA": 71000,
+    "DETALLE": "Transferencias Corrientes al Sector Privado"
+  },
+  {
+    "PARTIDA": 71100,
+    "DETALLE": "Pensiones y Jubilaciones"
+  },
+  {
+    "PARTIDA": 71200,
+    "DETALLE": "Becas"
+  },
+  {
+    "PARTIDA": 71210,
+    "DETALLE": "Becas de estudios otorgadas a los servidores publicos"
+  },
+  {
+    "PARTIDA": 71220,
+    "DETALLE": "Becas de estudios, otorgadas a los estudiantes universitarios"
+  },
+  {
+    "PARTIDA": 71230,
+    "DETALLE": "Becas de estudios otorgadas a particulares"
+  },
+  {
+    "PARTIDA": 71300,
+    "DETALLE": "Donaciones, Ayudas Sociales y Premios a Personas"
+  },
+  {
+    "PARTIDA": 71600,
+    "DETALLE": "Subsidios y Donac.a perso. e  Inst.Priv.sin Fines de Lucro"
+  },
+  {
+    "PARTIDA": 71610,
+    "DETALLE": "A Personas e Instituciones Privadas sin Fines de Lucro"
+  },
+  {
+    "PARTIDA": 71620,
+    "DETALLE": "A Comités de Vigilancia"
+  },
+  {
+    "PARTIDA": 71630,
+    "DETALLE": "Otros de Carácter Social Establecidos por Norma Legal"
+  },
+  {
+    "PARTIDA": 71700,
+    "DETALLE": "Subvenciones Economicas a Empresas"
+  },
+  {
+    "PARTIDA": 71800,
+    "DETALLE": "Pensiones Vitalicias"
+  },
+  {
+    "PARTIDA": 71900,
+    "DETALLE": "Transferencias por las compras de control tributario"
+  },
+  {
+    "PARTIDA": 72000,
+    "DETALLE": "Transf. Ctes. al Sect.Pub.no Fin.por Part.en Tribu"
+  },
+  {
+    "PARTIDA": 72200,
+    "DETALLE": "Transf.Ctes.a Inst.Pub.Desc. Univ. Publi. por participacion Tributos"
+  },
+  {
+    "PARTIDA": 72400,
+    "DETALLE": "Transferencias Corrientes al Gobierno Autónomo Departamental por Participación en Tributos"
+  },
+  {
+    "PARTIDA": 72410,
+    "DETALLE": "Para educacion"
+  },
+  {
+    "PARTIDA": 72420,
+    "DETALLE": "Otras"
+  },
+  {
+    "PARTIDA": 72500,
+    "DETALLE": "Transf.Corrintes a los Gob. Aut. Mun. e Indig. Orig."
+  },
+  {
+    "PARTIDA": 72510,
+    "DETALLE": "Para salud"
+  },
+  {
+    "PARTIDA": 72520,
+    "DETALLE": "Otras"
+  },
+  {
+    "PARTIDA": 73000,
+    "DETALLE": "Transf.Ctes.al Sect.Pub.no Finan.por Subsid o Subv"
+  },
+  {
+    "PARTIDA": 73100,
+    "DETALLE": "Transf.Ctes.a los Org. Ejec. del Est. Pluri. por Subsidios o Subvenciones"
+  },
+  {
+    "PARTIDA": 73200,
+    "DETALLE": "Transf.Ctes.a Inst.Pub.Desc.por Subs. o Subvencion"
+  },
+  {
+    "PARTIDA": 73400,
+    "DETALLE": "Transferencias Corrientes a Entidades Territoriales Autónomas por Subsidios o Subvenciones"
+  },
+  {
+    "PARTIDA": 73410,
+    "DETALLE": "Gobierno Autónomo Departamental"
+  },
+  {
+    "PARTIDA": 73420,
+    "DETALLE": "Gobierno Autónomo Municipal"
+  },
+  {
+    "PARTIDA": 73430,
+    "DETALLE": "Gobierno Autonomo Indígena Originario Campesino"
+  },
+  {
+    "PARTIDA": 73440,
+    "DETALLE": "Gobierno Autónomo Regional"
+  },
+  {
+    "PARTIDA": 73500,
+    "DETALLE": "Transf.Ctes.a Gob.Mun. x Subsidios o Subvenciones"
+  },
+  {
+    "PARTIDA": 73600,
+    "DETALLE": "Transf.Ctes.a Inst.de Seg.Soc.x Subsidios o Subven"
+  },
+  {
+    "PARTIDA": 73700,
+    "DETALLE": "Transf.Ctes.a Emp.Pub. Nac. x Subsid.o Subve"
+  },
+  {
+    "PARTIDA": 73800,
+    "DETALLE": "Transf.Ctes.a Emp.Pub. de las Ent. Publ. de las Ent. Terr. Aut. x Subsid.o Subven"
+  },
+  {
+    "PARTIDA": 73810,
+    "DETALLE": "Empresas Públicas Departamentales"
+  },
+  {
+    "PARTIDA": 73820,
+    "DETALLE": "Empresas Públicas Municipales"
+  },
+  {
+    "PARTIDA": 73830,
+    "DETALLE": "Empresas Públicas Indígenas Originarias Campesinas"
+  },
+  {
+    "PARTIDA": 73900,
+    "DETALLE": "Tran.Ctes.a Emp.Pub.no Fin.Gob.Mun.x Subs.o Subven"
+  },
+  {
+    "PARTIDA": 74000,
+    "DETALLE": "Transferencias Corrientes al Sec. Pub. Financiero"
+  },
+  {
+    "PARTIDA": 74100,
+    "DETALLE": "Transf.Ctes. a Inst. Pub.Finan. no Bancarias"
+  },
+  {
+    "PARTIDA": 74200,
+    "DETALLE": "Transf.Ctes. a Inst. Pub.Finan. Bancarias"
+  },
+  {
+    "PARTIDA": 75000,
+    "DETALLE": "Transf. de Capital al Sector Privado"
+  },
+  {
+    "PARTIDA": 75100,
+    "DETALLE": "Transf. de Capital a Personas"
+  },
+  {
+    "PARTIDA": 75200,
+    "DETALLE": "Transferencias de Capital a Instituciones Privadas sin fines de Lucro"
+  },
+  {
+    "PARTIDA": 75210,
+    "DETALLE": "A Instituciones Privadas sin Fines de Lucro"
+  },
+  {
+    "PARTIDA": 75220,
+    "DETALLE": "Otras de carácter económico – productivo"
+  },
+  {
+    "PARTIDA": 75300,
+    "DETALLE": "Transf. de Cap. a Empresas Privadas"
+  },
+  {
+    "PARTIDA": 77000,
+    "DETALLE": "Trasf.de Cap.al Sec.Pub.no Fin.x Subsid.o Subvenci"
+  },
+  {
+    "PARTIDA": 77100,
+    "DETALLE": "Transf.de Cap.al Org. Ejec. del Est. Plu. .x Subsid. o Subvencion"
+  },
+  {
+    "PARTIDA": 77200,
+    "DETALLE": "Transf.de Cap.a los Org. Leg. Jud. Elec. Ent. de Cot. y Def. Des. Univ .x Subsid.o Subvenc"
+  },
+  {
+    "PARTIDA": 77400,
+    "DETALLE": "Transf.de Cap.aEnt. Terr, Aut. x Subsidios o Subvenciones"
+  },
+  {
+    "PARTIDA": 77500,
+    "DETALLE": "Transf.de Cap.a Gob.Mun. e Ind. Org. Camp. x Subsidios o Subvenciones"
+  },
+  {
+    "PARTIDA": 77510,
+    "DETALLE": "Diálogo Nacional 2000"
+  },
+  {
+    "PARTIDA": 77511,
+    "DETALLE": "Para salud"
+  },
+  {
+    "PARTIDA": 77512,
+    "DETALLE": "Para Educacion"
+  },
+  {
+    "PARTIDA": 77513,
+    "DETALLE": "Para infraestructura"
+  },
+  {
+    "PARTIDA": 77520,
+    "DETALLE": "Por Patentes petroleras"
+  },
+  {
+    "PARTIDA": 77530,
+    "DETALLE": "Otras"
+  },
+  {
+    "PARTIDA": 77600,
+    "DETALLE": "Transf.de Cap. a Inst.de Seg.Soc.x Subs.o Subvenc"
+  },
+  {
+    "PARTIDA": 77700,
+    "DETALLE": "Transf.de Cap.a Emp.Pub. Nac .x Subs.o Sub"
+  },
+  {
+    "PARTIDA": 77800,
+    "DETALLE": "Transf.de Cap.a Emp.Pub.de las Ent. Terr. Aut. x Subs. o Subve"
+  },
+  {
+    "PARTIDA": 77810,
+    "DETALLE": "A Empresas Públicas Departamentales"
+  },
+  {
+    "PARTIDA": 77820,
+    "DETALLE": "A Empresas Públicas Municipales"
+  },
+  {
+    "PARTIDA": 77830,
+    "DETALLE": "A Empresas Públicas Indígenas Originarias y Campesinas"
+  },
+  {
+    "PARTIDA": 77900,
+    "DETALLE": "Transf.de Cap.a Emp.Pub.no Fin.Gob.Mun.x Subs.oSub"
+  },
+  {
+    "PARTIDA": 78000,
+    "DETALLE": "Transf.de Cap.al Sect. Pub. Financiero"
+  },
+  {
+    "PARTIDA": 78100,
+    "DETALLE": "Transf.de Cap. a Inst. Pub. Fin. no Bancarias"
+  },
+  {
+    "PARTIDA": 78200,
+    "DETALLE": "Transf.de Cap. a Inst. Pub. Fin. Bancarias"
+  },
+  {
+    "PARTIDA": 79000,
+    "DETALLE": "Transferencias al Exterior"
+  },
+  {
+    "PARTIDA": 79100,
+    "DETALLE": "Transf.Ctes.a Gob.Extran.y Org.Intern.x Cuot.Regul"
+  },
+  {
+    "PARTIDA": 79200,
+    "DETALLE": "Trans.Ctes.a Gob.Extr.y Org.Intern.x Cuot.Extraord"
+  },
+  {
+    "PARTIDA": 79300,
+    "DETALLE": "Otras Transferencias Corrientes al Exterior"
+  },
+  {
+    "PARTIDA": 79310,
+    "DETALLE": "Transferencias al Exterior en Efectivo"
+  },
+  {
+    "PARTIDA": 79320,
+    "DETALLE": "Transferencias al Exterior en Especie"
+  },
+  {
+    "PARTIDA": 79400,
+    "DETALLE": "Transferencias de Capital al Exterior"
+  },
+  {
+    "PARTIDA": 80000,
+    "DETALLE": "IMPUESTOS,REGALIAS Y TASAS"
+  },
+  {
+    "PARTIDA": 81000,
+    "DETALLE": "Renta Interna"
+  },
+  {
+    "PARTIDA": 81100,
+    "DETALLE": "Impuesto Sobre las Utilidades de las Empresas"
+  },
+  {
+    "PARTIDA": 81200,
+    "DETALLE": "Impuesto a las Transacciones"
+  },
+  {
+    "PARTIDA": 81300,
+    "DETALLE": "Impuesto al Valor Agregado Mercado Interno"
+  },
+  {
+    "PARTIDA": 81400,
+    "DETALLE": "Impuesto al valor agregado Importaciones"
+  },
+  {
+    "PARTIDA": 81500,
+    "DETALLE": "Impuesto a los consumos específicos Mercado Intern"
+  },
+  {
+    "PARTIDA": 81600,
+    "DETALLE": "Impuesto a los consumos específicos Importaciones"
+  },
+  {
+    "PARTIDA": 81700,
+    "DETALLE": "Impuesto especial a los Hidrocarburos y sus Deriva"
+  },
+  {
+    "PARTIDA": 81800,
+    "DETALLE": "Impto especial a los Hidrocarburos y sus Der.Impor"
+  },
+  {
+    "PARTIDA": 81900,
+    "DETALLE": "Otros Impuestos"
+  },
+  {
+    "PARTIDA": 81910,
+    "DETALLE": "Impuestos a las salidas aereas al exterior"
+  },
+  {
+    "PARTIDA": 81920,
+    "DETALLE": "Regimen Tributario Simplificado"
+  },
+  {
+    "PARTIDA": 81930,
+    "DETALLE": "Regimen Tributario Integrado"
+  },
+  {
+    "PARTIDA": 81950,
+    "DETALLE": "Impuesto Transmisión Gratuita de Bienes - ITGB"
+  },
+  {
+    "PARTIDA": 81960,
+    "DETALLE": "Impuesto a las Transacciones Financieras - ITF"
+  },
+  {
+    "PARTIDA": 81990,
+    "DETALLE": "Otros"
+  },
+  {
+    "PARTIDA": 82000,
+    "DETALLE": "Renta Aduanera"
+  },
+  {
+    "PARTIDA": 82100,
+    "DETALLE": "Gravamen Arancelario"
+  },
+  {
+    "PARTIDA": 83000,
+    "DETALLE": "Impuestos Municipales"
+  },
+  {
+    "PARTIDA": 83100,
+    "DETALLE": "Impuestos a propiedad de Bienes"
+  },
+  {
+    "PARTIDA": 83110,
+    "DETALLE": "Bienes Inmuebles"
+  },
+  {
+    "PARTIDA": 83120,
+    "DETALLE": "Vehiculos Automotores"
+  },
+  {
+    "PARTIDA": 83200,
+    "DETALLE": "Impuesto a la Transferencias onerosas de Bien. Inm. y Vehi. Aut."
+  },
+  {
+    "PARTIDA": 83210,
+    "DETALLE": "Inmuebles"
+  },
+  {
+    "PARTIDA": 83220,
+    "DETALLE": "Vehiculos Automotores"
+  },
+  {
+    "PARTIDA": 84100,
+    "DETALLE": "Regalias Mineras"
+  },
+  {
+    "PARTIDA": 84200,
+    "DETALLE": "Regalias por Hidrocarburos"
+  },
+  {
+    "PARTIDA": 84230,
+    "DETALLE": "6% Participación TGN"
+  },
+  {
+    "PARTIDA": 84240,
+    "DETALLE": "11 % Sobre Producción por Regalías Departamentales"
+  },
+  {
+    "PARTIDA": 84250,
+    "DETALLE": "1 % sobre Producción por Regalías Departamentales"
+  },
+  {
+    "PARTIDA": 84300,
+    "DETALLE": "Regalías Agropecuarias"
+  },
+  {
+    "PARTIDA": 84900,
+    "DETALLE": "Otras Regalías"
+  },
+  {
+    "PARTIDA": 85000,
+    "DETALLE": "Tasas Multas y Otros"
+  },
+  {
+    "PARTIDA": 85100,
+    "DETALLE": "Tasas"
+  },
+  {
+    "PARTIDA": 85200,
+    "DETALLE": "Derechos"
+  },
+  {
+    "PARTIDA": 85300,
+    "DETALLE": "Contribuciones Por Mejoras"
+  },
+  {
+    "PARTIDA": 85400,
+    "DETALLE": "Multas"
+  },
+  {
+    "PARTIDA": 85500,
+    "DETALLE": "Intereses Penales"
+  },
+  {
+    "PARTIDA": 85900,
+    "DETALLE": "Otros"
+  },
+  {
+    "PARTIDA": 86000,
+    "DETALLE": "Patentes"
+  },
+  {
+    "PARTIDA": 86100,
+    "DETALLE": "Patentes"
+  },
+  {
+    "PARTIDA": 90000,
+    "DETALLE": "OTROS GASTOS"
+  },
+  {
+    "PARTIDA": 91000,
+    "DETALLE": "Intereses de Instituciones Financieras"
+  },
+  {
+    "PARTIDA": 91100,
+    "DETALLE": "Intereses de Inst. Pub. Fin. no Bancarias"
+  },
+  {
+    "PARTIDA": 91200,
+    "DETALLE": "Intereses de Inst.Pub. Fin. Bancarias"
+  },
+  {
+    "PARTIDA": 94000,
+    "DETALLE": "Beneficios Sociales y Otros"
+  },
+  {
+    "PARTIDA": 94100,
+    "DETALLE": "Indemnizacion"
+  },
+  {
+    "PARTIDA": 94200,
+    "DETALLE": "Desahucio"
+  },
+  {
+    "PARTIDA": 94300,
+    "DETALLE": "Otros Beneficios Sociales"
+  },
+  {
+    "PARTIDA": 95000,
+    "DETALLE": "Contingencias Judiciales"
+  },
+  {
+    "PARTIDA": 95100,
+    "DETALLE": "Contingencias Judiciales"
+  },
+  {
+    "PARTIDA": 96000,
+    "DETALLE": "Otras Perdidas y Devoluciones"
+  },
+  {
+    "PARTIDA": 96100,
+    "DETALLE": "Perdidas en Operaciones Cambiarias"
+  },
+  {
+    "PARTIDA": 96200,
+    "DETALLE": "Devoluciones"
+  },
+  {
+    "PARTIDA": 96900,
+    "DETALLE": "Otras Perdidas"
+  },
+  {
+    "PARTIDA": 97000,
+    "DETALLE": "Comisiones y Bonificaciones"
+  },
+  {
+    "PARTIDA": 97100,
+    "DETALLE": "Comisiones por Ventas"
+  },
+  {
+    "PARTIDA": 97200,
+    "DETALLE": "Bonificaciones por Ventas"
+  },
+  {
+    "PARTIDA": 98000,
+    "DETALLE": "Retiros de Capital"
+  },
+  {
+    "PARTIDA": 98100,
+    "DETALLE": "Del Sector Público"
+  },
+  {
+    "PARTIDA": 98200,
+    "DETALLE": "Del Sector Privado"
+  },
+  {
+    "PARTIDA": 99000,
+    "DETALLE": "Provisiones de gastos corrientes y de capital"
+  },
+  {
+    "PARTIDA": 99100,
+    "DETALLE": "Provisiones para gasto de capital"
+  },
+  {
+    "PARTIDA": 99200,
+    "DETALLE": "Provisiones de gastos corrientes"
+  },
+  {
+    "PARTIDA": 66240,
+    "DETALLE": "Gastos Devengados No Pagados por Activos Financieros"
+  },
+  {
+    "PARTIDA": 26700,
+    "DETALLE": "Servicios de Laboratorios Especializados"
+  },
+  {
+    "PARTIDA": 26950,
+    "DETALLE": "Aguinaldo \"Esfuerzo por Bolivia\""
+  },
+  {
+    "PARTIDA": 39911,
+    "DETALLE": "Acuñamiento de monedas"
+  },
+  {
+    "PARTIDA": 39912,
+    "DETALLE": "Impresión de billetes"
+  },
+  {
+    "PARTIDA": 51900,
+    "DETALLE": "Inversion en el exterior"
+  },
+  {
+    "PARTIDA": 52440,
+    "DETALLE": "Gobierno Autonomo Regional"
+  },
+  {
+    "PARTIDA": 52840,
+    "DETALLE": "Del Gobierno Autonomo Regional"
+  },
+  {
+    "PARTIDA": 53800,
+    "DETALLE": "Concesion de Prestamos a Largo Plazo a Empresas Publicas Territoriales"
+  },
+  {
+    "PARTIDA": 65210,
+    "DETALLE": "Gastos Devengados no pagados por servicio no personales"
+  },
+  {
+    "PARTIDA": 65220,
+    "DETALLE": "Gastos devengados no pagados por materiales y suministros"
+  },
+  {
+    "PARTIDA": 65230,
+    "DETALLE": "Gastos devengados no pagados por activos reales"
+  },
+  {
+    "PARTIDA": 65240,
+    "DETALLE": "Gastos devengados no pagados por activos Financieros"
+  },
+  {
+    "PARTIDA": 73300,
+    "DETALLE": "Trans. ctes. del fondo compensatorio nacional de salud"
+  },
+  {
+    "PARTIDA": 73840,
+    "DETALLE": "Empresas Publicas Regionales"
+  },
+  {
+    "PARTIDA": 77410,
+    "DETALLE": "Al Gobierno Autonomo Departamental"
+  },
+  {
+    "PARTIDA": 77440,
+    "DETALLE": "Al Gobierno Autonomo Regional"
+  },
+  {
+    "PARTIDA": 77840,
+    "DETALLE": "a Empresas Publicas Regionales"
+  },
+  {
+    "PARTIDA": 84000,
+    "DETALLE": "Regalias"
+  },
+  {
+    "PARTIDA": 98300,
+    "DETALLE": "Pago de Dividendos"
+  },
+  {
+    "PARTIDA": 75110,
+    "DETALLE": "En Efectivo"
+  },
+  {
+    "PARTIDA": 75120,
+    "DETALLE": "En Especie"
+  },
+  {
+    "PARTIDA": 75211,
+    "DETALLE": "En Efectivo"
+  },
+  {
+    "PARTIDA": 75212,
+    "DETALLE": "En Especie"
+  },
+  {
+    "PARTIDA": 75221,
+    "DETALLE": "En Especie"
+  },
+  {
+    "PARTIDA": 75222,
+    "DETALLE": "En Efectivo"
+  },
+  {
+    "PARTIDA": 42400,
+    "DETALLE": "Construcciones y Mejoras de Bienes Públicos Nacionales de Dominio Privado - Llave en"
+  },
+  {
+    "PARTIDA": 42500,
+    "DETALLE": "Construcciones y Mejoras de Bienes Públicos Nacionales de Dominio Público - Llave en"
+  },
+  {
+    "PARTIDA": 71500,
+    "DETALLE": "Subsidios a Personas ó Instituciones Privadas"
+  },
+  {
+    "PARTIDA": 66250,
+    "DETALLE": "Gastos Devengados no Asignados por servicios de la deuda"
+  },
+  {
+    "PARTIDA": 75310,
+    "DETALLE": "En Efectivo"
+  },
+  {
+    "PARTIDA": 75320,
+    "DETALLE": "En Especie"
+  },
+  {
+    "PARTIDA": 11331,
+    "DETALLE": "Pago Variable"
+  },
+  {
+    "PARTIDA": 10000,
+    "DETALLE": "SERVICIOS PERSONALES"
+  },
+  {
+    "PARTIDA": 11000,
+    "DETALLE": "Empleados Permanentes"
+  },
+  {
+    "PARTIDA": 11100,
+    "DETALLE": "Haberes Básicos"
+  },
+  {
+    "PARTIDA": 11200,
+    "DETALLE": "Bono de Antiguedad"
+  },
+  {
+    "PARTIDA": 11220,
+    "DETALLE": "Bono de Antiguedad"
+  },
+  {
+    "PARTIDA": 11300,
+    "DETALLE": "Bonificaciones"
+  },
+  {
+    "PARTIDA": 11320,
+    "DETALLE": "Remuneraciones Colaterales-Medicas y trabajadores en salud"
+  },
+  {
+    "PARTIDA": 11321,
+    "DETALLE": "Categorias Médicas"
+  },
+  {
+    "PARTIDA": 11322,
+    "DETALLE": "Escalafon Medico"
+  },
+  {
+    "PARTIDA": 11323,
+    "DETALLE": "Escalafon de trabajadores en salud dependientes de los serv.deptales salud"
+  },
+  {
+    "PARTIDA": 11324,
+    "DETALLE": "Otras remuneraciones"
+  },
+  {
+    "PARTIDA": 11330,
+    "DETALLE": "Otras Bonificaciones"
+  },
+  {
+    "PARTIDA": 11400,
+    "DETALLE": "Aguinaldos"
+  },
+  {
+    "PARTIDA": 11500,
+    "DETALLE": "Primas"
+  },
+  {
+    "PARTIDA": 11510,
+    "DETALLE": "Primas"
+  },
+  {
+    "PARTIDA": 11520,
+    "DETALLE": "Bono de produccion"
+  },
+  {
+    "PARTIDA": 11600,
+    "DETALLE": "Asignaciones Familiares"
+  },
+  {
+    "PARTIDA": 11700,
+    "DETALLE": "Sueldos"
+  },
+  {
+    "PARTIDA": 11800,
+    "DETALLE": "Dietas"
+  },
+  {
+    "PARTIDA": 11810,
+    "DETALLE": "Dietas de Directorio"
+  },
+  {
+    "PARTIDA": 11820,
+    "DETALLE": "Otras dietas"
+  },
+  {
+    "PARTIDA": 11900,
+    "DETALLE": "Otros Servicios Personales"
+  },
+  {
+    "PARTIDA": 11910,
+    "DETALLE": "Horas Extraordinarias"
+  },
+  {
+    "PARTIDA": 11920,
+    "DETALLE": "Vacaciones no Utilizadas"
+  },
+  {
+    "PARTIDA": 11930,
+    "DETALLE": "Incentivos Económicos"
+  },
+  {
+    "PARTIDA": 11940,
+    "DETALLE": "Suplencias"
+  },
+  {
+    "PARTIDA": 12000,
+    "DETALLE": "Empleados no Permanentes"
+  },
+  {
+    "PARTIDA": 12100,
+    "DETALLE": "Personal Eventual"
+  },
+  {
+    "PARTIDA": 13000,
+    "DETALLE": "Prevision Social"
+  },
+  {
+    "PARTIDA": 13100,
+    "DETALLE": "Aporte Patronal al Seguro Social"
+  },
+  {
+    "PARTIDA": 13110,
+    "DETALLE": "Régimen de Corto Plazo (Salud)"
+  },
+  {
+    "PARTIDA": 13120,
+    "DETALLE": "Prima de riesgo Profesional - Régimen de Largo Plazo"
+  },
+  {
+    "PARTIDA": 13130,
+    "DETALLE": "Aporte patronal Solidario-Regimen Largo Plazo"
+  },
+  {
+    "PARTIDA": 13131,
+    "DETALLE": "Aporte Patronal Solidario 3%"
+  },
+  {
+    "PARTIDA": 13132,
+    "DETALLE": "Aporte Patronal Minero Solidario 2%"
+  },
+  {
+    "PARTIDA": 13200,
+    "DETALLE": "Aporte Patronal para Vivienda"
+  },
+  {
+    "PARTIDA": 14000,
+    "DETALLE": "Otros Aportes"
+  },
+  {
+    "PARTIDA": 14100,
+    "DETALLE": "Otros Aportes"
+  },
+  {
+    "PARTIDA": 15000,
+    "DETALLE": "Previsiones para Incremento de Gastos en Serv. Per"
+  },
+  {
+    "PARTIDA": 15100,
+    "DETALLE": "Incremento Salarial"
+  },
+  {
+    "PARTIDA": 15200,
+    "DETALLE": "Crecimiento Vegetativo"
+  },
+  {
+    "PARTIDA": 15300,
+    "DETALLE": "Creacion de Items"
+  },
+  {
+    "PARTIDA": 15400,
+    "DETALLE": "Otras Previsiones"
+  },
+  {
+    "PARTIDA": 20000,
+    "DETALLE": "SERVICIOS NO PERSONALES"
+  },
+  {
+    "PARTIDA": 21000,
+    "DETALLE": "Servicios Básicos"
+  },
+  {
+    "PARTIDA": 21100,
+    "DETALLE": "Comunicaciones"
+  },
+  {
+    "PARTIDA": 21200,
+    "DETALLE": "Energia Electrica"
+  },
+  {
+    "PARTIDA": 21300,
+    "DETALLE": "Agua"
+  },
+  {
+    "PARTIDA": 21400,
+    "DETALLE": "Telefonía"
+  },
+  {
+    "PARTIDA": 21500,
+    "DETALLE": "Gas Domiciliario"
+  },
+  {
+    "PARTIDA": 21600,
+    "DETALLE": "Internet"
+  },
+  {
+    "PARTIDA": 22000,
+    "DETALLE": "Servicio de Transporte y Seguros"
+  },
+  {
+    "PARTIDA": 22100,
+    "DETALLE": "Pasajes"
+  },
+  {
+    "PARTIDA": 22110,
+    "DETALLE": "Pasajes al interior del pais"
+  },
+  {
+    "PARTIDA": 22120,
+    "DETALLE": "Pasajes al exterior del pais"
+  },
+  {
+    "PARTIDA": 22200,
+    "DETALLE": "Viaticos"
+  },
+  {
+    "PARTIDA": 22210,
+    "DETALLE": "Viaticos por viajes al interior del pais"
+  },
+  {
+    "PARTIDA": 22220,
+    "DETALLE": "Viáticos por viajes al exterior del pais"
+  },
+  {
+    "PARTIDA": 22300,
+    "DETALLE": "Fletes y Almacenamiento"
+  },
+  {
+    "PARTIDA": 22400,
+    "DETALLE": "Gastos de Instalacion y Retorno"
+  },
+  {
+    "PARTIDA": 22500,
+    "DETALLE": "Seguros"
+  },
+  {
+    "PARTIDA": 22600,
+    "DETALLE": "Transporte de Personal"
+  },
+  {
+    "PARTIDA": 23000,
+    "DETALLE": "Alquileres"
+  },
+  {
+    "PARTIDA": 23100,
+    "DETALLE": "Alquiler de Inmuebles"
+  },
+  {
+    "PARTIDA": 23200,
+    "DETALLE": "Alquiler de Equipos y Maquinarias"
+  },
+  {
+    "PARTIDA": 23300,
+    "DETALLE": "Alquiler de Tierras y Terrenos"
+  },
+  {
+    "PARTIDA": 23400,
+    "DETALLE": "Otros Alquileres"
+  },
+  {
+    "PARTIDA": 24000,
+    "DETALLE": "Mantenimiento y Reparaciones"
+  },
+  {
+    "PARTIDA": 24100,
+    "DETALLE": "Mantenimiento y Reparación de Inmuebles y Equipos"
+  },
+  {
+    "PARTIDA": 24110,
+    "DETALLE": "Mantenimiento y Reparación de Inmuebles"
+  },
+  {
+    "PARTIDA": 24120,
+    "DETALLE": "Mantenimiento y Reparación de Vehículos, Maquinaria y Equipo"
+  },
+  {
+    "PARTIDA": 24130,
+    "DETALLE": "Mantenimiento y Reparación de Muebles y enseres"
+  },
+  {
+    "PARTIDA": 24200,
+    "DETALLE": "Mantenimiento de Vías de Comunicación"
+  },
+  {
+    "PARTIDA": 24300,
+    "DETALLE": "Otros Gastos por Concepto de  Instalación, Mantenimiento y Reparación"
+  },
+  {
+    "PARTIDA": 25000,
+    "DETALLE": "Servicios Profesionales y Comerciales"
+  },
+  {
+    "PARTIDA": 25100,
+    "DETALLE": "Medicos, Sanitarios y Sociales"
+  },
+  {
+    "PARTIDA": 25110,
+    "DETALLE": "Gastos del seguro de salud del adulto mayor"
+  },
+  {
+    "PARTIDA": 25120,
+    "DETALLE": "Gastos especializados por atencion medica y otros"
+  },
+  {
+    "PARTIDA": 25130,
+    "DETALLE": "Gastos por aficliacion de estudiante universitarios al seguro social"
+  },
+  {
+    "PARTIDA": 25200,
+    "DETALLE": "Estudios, Investigaciones, Auditorias Externas y Revalorizaciones"
+  },
+  {
+    "PARTIDA": 25210,
+    "DETALLE": "Consultorías por Producto"
+  },
+  {
+    "PARTIDA": 25220,
+    "DETALLE": "Consultores Individuales de Línea"
+  },
+  {
+    "PARTIDA": 25230,
+    "DETALLE": "Auditorías Externas"
+  },
+  {
+    "PARTIDA": 25300,
+    "DETALLE": "Comisiones y Gastos Bancarios"
+  },
+  {
+    "PARTIDA": 25400,
+    "DETALLE": "Lavanderia, Limpieza e Higiene"
+  },
+  {
+    "PARTIDA": 25500,
+    "DETALLE": "Publicidad"
+  },
+  {
+    "PARTIDA": 25600,
+    "DETALLE": "Servicios de imprenta, Fotocopiado y fotográficos"
+  },
+  {
+    "PARTIDA": 25700,
+    "DETALLE": "Capacitacion del Personal"
+  },
+  {
+    "PARTIDA": 25800,
+    "DETALLE": "Estudios e Investigaciones para Proyectos de Inv."
+  },
+  {
+    "PARTIDA": 25810,
+    "DETALLE": "Consultorías por Producto"
+  },
+  {
+    "PARTIDA": 25820,
+    "DETALLE": "Consultores Individuales de linea"
+  },
+  {
+    "PARTIDA": 25900,
+    "DETALLE": "Servicios Manuales"
+  },
+  {
+    "PARTIDA": 26000,
+    "DETALLE": "Otros Servicios no Personales"
+  },
+  {
+    "PARTIDA": 26200,
+    "DETALLE": "Gastos Judiciales"
+  },
+  {
+    "PARTIDA": 26300,
+    "DETALLE": "Derechos sobre Bienes Intangibles"
+  },
+  {
+    "PARTIDA": 26500,
+    "DETALLE": "Conjueces y jueces ciudadanos"
+  },
+  {
+    "PARTIDA": 26600,
+    "DETALLE": "Servicio de Seguridad de los Batallones de Seguridad Fis. Policia Nal. y Vig.Priv."
+  },
+  {
+    "PARTIDA": 26610,
+    "DETALLE": "Servicios Públicos"
+  },
+  {
+    "PARTIDA": 26620,
+    "DETALLE": "Servicios Privados"
+  },
+  {
+    "PARTIDA": 26630,
+    "DETALLE": "Servicios por traslado de valores"
+  },
+  {
+    "PARTIDA": 26900,
+    "DETALLE": "Otros Servicios no Personales"
+  },
+  {
+    "PARTIDA": 26910,
+    "DETALLE": "Gastos de Representación"
+  },
+  {
+    "PARTIDA": 26920,
+    "DETALLE": "Fallas de Caja"
+  },
+  {
+    "PARTIDA": 26930,
+    "DETALLE": "Pago por Trabajos Dirigidos y Pasantias"
+  },
+  {
+    "PARTIDA": 26940,
+    "DETALLE": "Compensacion costo de vida"
+  },
+  {
+    "PARTIDA": 26990,
+    "DETALLE": "Otros"
+  },
+  {
+    "PARTIDA": 27000,
+    "DETALLE": "Gastos especializados por la act. extractiva de rec. nat."
+  },
+  {
+    "PARTIDA": 27100,
+    "DETALLE": "Servicios por la extracción, transformación y conversión de rec. nat."
+  },
+  {
+    "PARTIDA": 27110,
+    "DETALLE": "Pago por costos incurridos"
+  },
+  {
+    "PARTIDA": 27120,
+    "DETALLE": "Pago por utilidades"
+  },
+  {
+    "PARTIDA": 30000,
+    "DETALLE": "MATERIALES Y SUMINISTROS"
+  },
+  {
+    "PARTIDA": 31000,
+    "DETALLE": "Alimentos y Productos Agroforestales"
+  },
+  {
+    "PARTIDA": 31100,
+    "DETALLE": "Alimentos y Bebidas para Personas, Desayuno Escolar y Otros"
+  },
+  {
+    "PARTIDA": 31110,
+    "DETALLE": "Gastos por Refrigerios Pnl.Permanente,Eventual y Consultores de Línea de Instituciones Públicas"
+  },
+  {
+    "PARTIDA": 31120,
+    "DETALLE": "Gastos de alimentacion y Otros Similares"
+  },
+  {
+    "PARTIDA": 31130,
+    "DETALLE": "Alimentacion Complementaria Escolar"
+  },
+  {
+    "PARTIDA": 31140,
+    "DETALLE": "Alimentacion hospitalaria, penitenciaria, Aeronaves y Otras Especificas"
+  },
+  {
+    "PARTIDA": 31150,
+    "DETALLE": "Alimentos y Bebidas para la atención de emergencias y desastres naturales."
+  },
+  {
+    "PARTIDA": 31200,
+    "DETALLE": "Alimentos para Animales"
+  },
+  {
+    "PARTIDA": 31300,
+    "DETALLE": "Productos Agricolas y Pecuarios y Forestales"
+  },
+  {
+    "PARTIDA": 32000,
+    "DETALLE": "Productos de Papel, Cartón é Impresos"
+  },
+  {
+    "PARTIDA": 32100,
+    "DETALLE": "Papel "
+  },
+  {
+    "PARTIDA": 32200,
+    "DETALLE": "Productos de Artes Gráficas"
+  },
+  {
+    "PARTIDA": 32300,
+    "DETALLE": "Libros, Manuales y Revistas"
+  },
+  {
+    "PARTIDA": 32400,
+    "DETALLE": "Textos de Ense¤anza"
+  },
+  {
+    "PARTIDA": 32500,
+    "DETALLE": "Periodicos y Boletines"
+  },
+  {
+    "PARTIDA": 33000,
+    "DETALLE": "Textiles y Vestuario"
+  },
+  {
+    "PARTIDA": 33100,
+    "DETALLE": "Hilados, Telas, Fibras y Algodon"
+  },
+  {
+    "PARTIDA": 33200,
+    "DETALLE": "Confecciones Textiles"
+  },
+  {
+    "PARTIDA": 33300,
+    "DETALLE": "Prendas de Vestir"
+  },
+  {
+    "PARTIDA": 33400,
+    "DETALLE": "Calzados"
+  },
+  {
+    "PARTIDA": 34000,
+    "DETALLE": "Combustibles,Produc.Químicos, Farmaceúticos y Otras Fuentes de Energia"
+  },
+  {
+    "PARTIDA": 34100,
+    "DETALLE": "Combustibles, Lubricantes, Derivados y otras Fuentes de Energia"
+  },
+  {
+    "PARTIDA": 34110,
+    "DETALLE": "Combustibles, Lubricantes y Derivados para Consumo"
+  },
+  {
+    "PARTIDA": 34120,
+    "DETALLE": "Combustibles, Lubricantes y Derivados para Comercialización"
+  },
+  {
+    "PARTIDA": 34130,
+    "DETALLE": "Energía Eléctrica para Comercialización"
+  },
+  {
+    "PARTIDA": 34200,
+    "DETALLE": "Productos Químicos y Farmaceúticos"
+  },
+  {
+    "PARTIDA": 34300,
+    "DETALLE": "Llantas y Neumáticos"
+  },
+  {
+    "PARTIDA": 34400,
+    "DETALLE": "Productos de Cuero y Caucho"
+  },
+  {
+    "PARTIDA": 34500,
+    "DETALLE": "Productos de Minerales no Metálicos y Plásticos"
+  },
+  {
+    "PARTIDA": 34600,
+    "DETALLE": "Productos Metálicos"
+  },
+  {
+    "PARTIDA": 34700,
+    "DETALLE": "Minerales"
+  },
+  {
+    "PARTIDA": 34800,
+    "DETALLE": "Herramientas Menores"
+  },
+  {
+    "PARTIDA": 34900,
+    "DETALLE": "Materiales y Equipo Militar"
+  },
+  {
+    "PARTIDA": 39000,
+    "DETALLE": "Productos Varios"
+  },
+  {
+    "PARTIDA": 39100,
+    "DETALLE": "Material de Limpieza e Higiene"
+  },
+  {
+    "PARTIDA": 39200,
+    "DETALLE": "Material Deportivo y Recreativo"
+  },
+  {
+    "PARTIDA": 39300,
+    "DETALLE": "Utensilios de Cocina y Comedor"
+  },
+  {
+    "PARTIDA": 39400,
+    "DETALLE": "Instrumental Menor Medico Quirurgico"
+  },
+  {
+    "PARTIDA": 39500,
+    "DETALLE": "Utiles de escritorio y oficina"
+  },
+  {
+    "PARTIDA": 39600,
+    "DETALLE": "Útiles Educacionales, Culturales y de Capacitación"
+  },
+  {
+    "PARTIDA": 39700,
+    "DETALLE": "Utiles y materiales eléctricos"
+  },
+  {
+    "PARTIDA": 39800,
+    "DETALLE": "Otros respuestos y accesorios"
+  },
+  {
+    "PARTIDA": 39900,
+    "DETALLE": "Otros Materiales y Suministros"
+  },
+  {
+    "PARTIDA": 39910,
+    "DETALLE": "Acuñación de monedas y billetes"
+  },
+  {
+    "PARTIDA": 39990,
+    "DETALLE": "Otros Materiales y Suministros"
+  },
+  {
+    "PARTIDA": 40000,
+    "DETALLE": "ACTIVOS REALES"
+  },
+  {
+    "PARTIDA": 41000,
+    "DETALLE": "Inmobiliarios"
+  },
+  {
+    "PARTIDA": 41100,
+    "DETALLE": "Edificios"
+  },
+  {
+    "PARTIDA": 41200,
+    "DETALLE": "Tierras y Terrenos"
+  },
+  {
+    "PARTIDA": 41300,
+    "DETALLE": "Otras Adquisiciones"
+  },
+  {
+    "PARTIDA": 42000,
+    "DETALLE": "Construcciones"
+  },
+  {
+    "PARTIDA": 42200,
+    "DETALLE": "Construcciones y Mejoras de Bienes Publicos Nacionales de Dominio  Privado"
+  },
+  {
+    "PARTIDA": 42210,
+    "DETALLE": "Construcciones y Mejoras de Viviendas"
+  },
+  {
+    "PARTIDA": 42220,
+    "DETALLE": "Construcciones y Mejoras p/Defensa y Seguridad"
+  },
+  {
+    "PARTIDA": 42230,
+    "DETALLE": "Otras construcciones y mejoras bienes de Dom.Priv."
+  },
+  {
+    "PARTIDA": 42240,
+    "DETALLE": "Supervisión de Construcciones y Mejoras de Bienes Publicos de Dominio Privado"
+  },
+  {
+    "PARTIDA": 42300,
+    "DETALLE": "Construcciones y Mejoras de Bs.Nales de Dom Public"
+  },
+  {
+    "PARTIDA": 42310,
+    "DETALLE": "Construcciones y Mejoras de Bs.de Dominio Público"
+  },
+  {
+    "PARTIDA": 42320,
+    "DETALLE": "Superv. de Const. y Mejoras de Bs. de Dom.Público"
+  },
+  {
+    "PARTIDA": 43000,
+    "DETALLE": "Mano"
+  },
+  {
+    "PARTIDA": 43100,
+    "DETALLE": "Equipo de oficina y muebles"
+  },
+  {
+    "PARTIDA": 43110,
+    "DETALLE": "Equipo de Oficina y Muebles"
+  },
+  {
+    "PARTIDA": 43120,
+    "DETALLE": "Equipo de Computación"
+  },
+  {
+    "PARTIDA": 43200,
+    "DETALLE": "Maquinaria y Equipo de Producción"
+  },
+  {
+    "PARTIDA": 43300,
+    "DETALLE": "Equipo de Transporte, Tracción y Elevación"
+  },
+  {
+    "PARTIDA": 43310,
+    "DETALLE": "Vehículos Livianos para Funciones Administrativas"
+  },
+  {
+    "PARTIDA": 43320,
+    "DETALLE": "Vehiculos livianos para proyectos de inversion publica"
+  },
+  {
+    "PARTIDA": 43330,
+    "DETALLE": "Maquinaria y equipo de transporte "
+  },
+  {
+    "PARTIDA": 43340,
+    "DETALLE": "Equipos de elevacion "
+  },
+  {
+    "PARTIDA": 43400,
+    "DETALLE": "Equipo Medico y de Laboratorio"
+  },
+  {
+    "PARTIDA": 43500,
+    "DETALLE": "Equipo de Comunicaciones"
+  },
+  {
+    "PARTIDA": 43600,
+    "DETALLE": "Equipo educacional y recreativo"
+  },
+  {
+    "PARTIDA": 43700,
+    "DETALLE": "Otra Maquinaria y Equipo"
+  },
+  {
+    "PARTIDA": 46000,
+    "DETALLE": "Estudios y Proyectos para Inversión"
+  },
+  {
+    "PARTIDA": 46100,
+    "DETALLE": "Para Construcción de Bs. de Dominio Privado"
+  },
+  {
+    "PARTIDA": 46110,
+    "DETALLE": "Consultoria por Producto para Construcciones de Bienes Públicos de Dominio Privado"
+  },
+  {
+    "PARTIDA": 46120,
+    "DETALLE": "Consultoría de Línea para Construcciones de Bienes Públicos de Dominio Privado"
+  },
+  {
+    "PARTIDA": 46200,
+    "DETALLE": "Para Construcción de Bs. de Dominio Publico"
+  },
+  {
+    "PARTIDA": 46210,
+    "DETALLE": "Construcciones por producto para construcciones de bienes de dominio publico"
+  },
+  {
+    "PARTIDA": 46220,
+    "DETALLE": "Construcciones en linea para construcciones de bienes de dominio publico"
+  },
+  {
+    "PARTIDA": 46300,
+    "DETALLE": "Consultoria para capacitacion, transferencia de tecnología y Org./proc. prod. en Proy. Inv."
+  },
+  {
+    "PARTIDA": 46310,
+    "DETALLE": "Consultoria por producto"
+  },
+  {
+    "PARTIDA": 46320,
+    "DETALLE": "Consultoria de linea"
+  },
+  {
+    "PARTIDA": 49000,
+    "DETALLE": "Otros Activos Fijos"
+  },
+  {
+    "PARTIDA": 49100,
+    "DETALLE": "Activos intangibles"
+  },
+  {
+    "PARTIDA": 49300,
+    "DETALLE": "Semovientes y Otros Animales"
+  },
+  {
+    "PARTIDA": 49400,
+    "DETALLE": "Activos museológicos y culturales"
+  },
+  {
+    "PARTIDA": 49900,
+    "DETALLE": "Otros Activos Fijos"
+  },
+  {
+    "PARTIDA": 50000,
+    "DETALLE": "ACTIVOS FINANCIEROS"
+  },
+  {
+    "PARTIDA": 51000,
+    "DETALLE": "Compra de Acc. y Participaciones de Capital"
+  },
+  {
+    "PARTIDA": 51100,
+    "DETALLE": "Acc. y Partic. de Capital en Emp. Priv. Nacionales"
+  },
+  {
+    "PARTIDA": 51200,
+    "DETALLE": "Acciones y Participaciones de Capital en Empresas Públicas Nacionales"
+  },
+  {
+    "PARTIDA": 51300,
+    "DETALLE": "Acc. y Partic.de Cap.en Emp.Pub. Territoriales"
+  },
+  {
+    "PARTIDA": 51400,
+    "DETALLE": "Acc.y Partic.de Cap.en Emp.Pub.No Fin.Municipales"
+  },
+  {
+    "PARTIDA": 51500,
+    "DETALLE": "Acc.y Partic.de Cap.en Inst.Pub.Fin. no Bancarias"
+  },
+  {
+    "PARTIDA": 51600,
+    "DETALLE": "Acc.y Partic.de Cap.en Inst.Pub.Fin. Bancarias"
+  }
+]
