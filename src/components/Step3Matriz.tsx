@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RowData, ResultadoPrincipal } from "@/types/poa";
-import { Plus, Trash2, FileText, ZoomIn, SlidersHorizontal, Building2, GraduationCap, Info } from "lucide-react";
+import { Plus, Trash2, FileText, SlidersHorizontal, Building2, GraduationCap, Download, Target, Search, ClipboardList, Edit3, BarChart3, Settings, Hash, Percent, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Step3PresupuestoGlobal } from "./Step3PresupuestoGlobal";
 
@@ -20,11 +20,12 @@ const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "
 interface Props {
   resultadosPrincipales: ResultadoPrincipal[];
   rows: RowData[];
-  addRowGroup: (resultadoPrincipalId: string) => void;
+  addRowGroup: (resultadoPrincipalId: string, prefilledData?: Partial<RowData>) => void;
   removeRowGroup: (index: number) => void;
   updateRow: (index: number, field: keyof RowData, value: string) => void;
   updateMonth: (rowIndex: number, monthIndex: number, value: string) => void;
   handleExportPdf: () => void;
+  handleExportExcel: () => void;
 }
 
 interface ActiveCell {
@@ -71,16 +72,107 @@ const colWidths = {
   }
 };
 
-export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRowGroup, updateRow, updateMonth, handleExportPdf }: Props) {
+export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRowGroup, updateRow, updateMonth, handleExportPdf, handleExportExcel }: Props) {
   const [activeCell, setActiveCell] = useState<ActiveCell | null>(null);
   const [zoomLevel, setZoomLevel] = useState<"normal" | "large" | "xlarge">("normal");
-  const [modalEditRowId, setModalEditRowId] = useState<string | null>(null);
 
   // Track modified cells to display orange warning flags
   const [modifiedCells, setModifiedCells] = useState<Set<string>>(new Set());
 
   // Non-editable cell warning alert
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
+
+  // Estados para el Modal Accesible de Agregar Resultado Intermedio
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [activeRpIdForAdd, setActiveRpIdForAdd] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeOption, setActiveOption] = useState<"plantilla" | "personalizado">("plantilla");
+  const [customResult, setCustomResult] = useState<{
+    producto: string;
+    indicador: string;
+    tipo: "Absoluto" | "Porcentual";
+  }>({
+    producto: "",
+    indicador: "",
+    tipo: "Absoluto"
+  });
+  const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number | null>(null);
+
+  const prevRowsLengthRef = useRef(rows.length);
+  const prevRowsIdsRef = useRef(new Set(rows.map(r => r.id)));
+
+  useEffect(() => {
+    if (rows.length > prevRowsLengthRef.current) {
+      const newRow = rows.find(r => !prevRowsIdsRef.current.has(r.id));
+      if (newRow) {
+        // Encontrar su relativeIndex en su respectivo Resultado Principal
+        const rpRows = rows.filter(r => r.resultadoPrincipalId === newRow.resultadoPrincipalId);
+        const relativeIndex = rpRows.findIndex(r => r.id === newRow.id);
+        
+        if (relativeIndex !== -1) {
+          // Esperamos a que el DOM se renderice para poder enfocar
+          setTimeout(() => {
+            focusCell("matriz", newRow.resultadoPrincipalId, relativeIndex, 4, true);
+          }, 100);
+        }
+      }
+    }
+    prevRowsLengthRef.current = rows.length;
+    prevRowsIdsRef.current = new Set(rows.map(r => r.id));
+  }, [rows]);
+
+  const openAddModal = (rpId: string) => {
+    setActiveRpIdForAdd(rpId);
+    setSearchQuery("");
+    setActiveOption("plantilla");
+    setCustomResult({
+      producto: "",
+      indicador: "",
+      tipo: "Absoluto"
+    });
+    setSelectedTemplateIndex(null);
+    setIsAddModalOpen(true);
+  };
+
+  const handleCustomChange = (field: string, value: string) => {
+    setCustomResult(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleConfirmAdd = () => {
+    if (!activeRpIdForAdd) return;
+
+    if (activeOption === "plantilla") {
+      if (selectedTemplateIndex === null) {
+        alert("Por favor seleccione una plantilla rápida de la lista.");
+        return;
+      }
+      const template = resultadosEstandarizados[selectedTemplateIndex];
+      addRowGroup(activeRpIdForAdd, {
+        productoSelect: template.nombre,
+        producto: template.nombre,
+        indicador: template.indicador,
+        tipo: template.tipo as any
+      });
+    } else {
+      if (!customResult.producto.trim()) {
+        alert("Por favor ingrese la descripción del resultado intermedio.");
+        return;
+      }
+      addRowGroup(activeRpIdForAdd, {
+        productoSelect: "Otro (Personalizado)",
+        producto: customResult.producto,
+        indicador: customResult.indicador,
+        tipo: customResult.tipo
+      });
+    }
+    setIsAddModalOpen(false);
+  };
+
+  // Filtrado de plantillas rápidas excluyendo la opción personalizada
+  const filteredTemplates = resultadosEstandarizados
+    .map((t, idx) => ({ ...t, originalIndex: idx }))
+    .filter(t => t.nombre !== "Otro (Personalizado)")
+    .filter(t => t.nombre.toLowerCase().includes(searchQuery.toLowerCase()));
   const [warningTimeout, setWarningTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const triggerWarning = () => {
@@ -141,19 +233,41 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
     { type: "presupuesto" as const, rpId: undefined }
   ];
 
-  const focusCell = (tableType: "matriz" | "presupuesto", rpId: string | undefined, rowIndex: number, colIndex: number) => {
+  const focusCell = (
+    tableType: "matriz" | "presupuesto",
+    rpId: string | undefined,
+    rowIndex: number,
+    colIndex: number,
+    startEditing: boolean = false
+  ) => {
     const id = tableType === "matriz"
       ? `cell-matriz-${rpId}-${rowIndex}-${colIndex}`
       : `cell-presupuesto-${rowIndex}-${colIndex}`;
     const element = document.getElementById(id);
     if (element) {
       element.focus();
-      return true;
     }
-    return false;
+
+    setActiveCell({ tableType, rpId, rowIndex, colIndex, isEditing: startEditing });
+
+    if (startEditing) {
+      setTimeout(() => {
+        const inputId = tableType === "matriz"
+          ? `input-matriz-${rpId}-${rowIndex}-${colIndex}`
+          : `input-presupuesto-${rowIndex}-${colIndex}`;
+        const input = document.getElementById(inputId);
+        if (input) {
+          (input as any).focus();
+          if ((input as any).select) {
+            (input as any).select();
+          }
+        }
+      }, 50);
+    }
+    return !!element;
   };
 
-  const navigateGrid = (direction: "up" | "down" | "left" | "right" | "next" | "prev") => {
+  const navigateGrid = (direction: "up" | "down" | "left" | "right" | "next" | "prev", startEditing: boolean = false) => {
     if (!activeCell) return;
 
     const { tableType, rpId, rowIndex, colIndex } = activeCell;
@@ -270,7 +384,7 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
     }
 
     const targetTable = tablesList[nextTableIndex];
-    focusCell(targetTable.type, targetTable.rpId, nextRowIndex, nextColIndex);
+    focusCell(targetTable.type, targetTable.rpId, nextRowIndex, nextColIndex, startEditing);
   };
 
   const handleCellFocus = (tableType: "matriz" | "presupuesto", rpId: string | undefined, rowIndex: number, colIndex: number, isEditingState: boolean = false) => {
@@ -408,10 +522,10 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
         : `cell-presupuesto-${rowIndex}-${colIndex}`;
       document.getElementById(cellId)?.focus();
 
-      // Excel behavior: move down one cell
+      // Excel behavior: move right to the next month and start editing
       setTimeout(() => {
-        navigateGrid("down");
-      }, 0);
+        navigateGrid("next", true);
+      }, 50);
     } else if (e.key === "Escape") {
       e.preventDefault();
       setActiveCell(prev => prev ? { ...prev, isEditing: false } : null);
@@ -429,11 +543,11 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
 
       setTimeout(() => {
         if (e.shiftKey) {
-          navigateGrid("prev");
+          navigateGrid("prev", true);
         } else {
-          navigateGrid("next");
+          navigateGrid("next", true);
         }
-      }, 0);
+      }, 50);
     }
   };
 
@@ -491,92 +605,12 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
     );
   };
 
-  const getHudDetails = () => {
-    if (!activeCell) return null;
-    const { tableType, rpId, rowIndex, colIndex } = activeCell;
-
-    if (tableType === "matriz") {
-      const rpIndex = resultadosPrincipales.findIndex(rp => rp.id === rpId);
-      const rpRows = rows.filter(r => r.resultadoPrincipalId === rpId);
-      const row = rpRows[rowIndex];
-      if (!row) return null;
-
-      const rowNum = `${rpIndex + 1}.${rowIndex + 1}`;
-      const rowName = row.producto || row.productoSelect || "Resultado Intermedio (Sin definir)";
-
-      let colName = "";
-      let val = "";
-      if (colIndex === 0) {
-        colName = "Número de Fila";
-        val = rowNum;
-      } else if (colIndex === 1) {
-        colName = "Resultado Intermedio";
-        val = row.productoSelect === "Otro (Personalizado)" ? row.producto : row.productoSelect || "Sin definir";
-      } else if (colIndex === 2) {
-        colName = "Indicador";
-        val = row.indicador || "Sin definir";
-      } else if (colIndex === 3) {
-        colName = "Tipo de Meta";
-        val = row.tipo;
-      } else if (colIndex >= 4 && colIndex <= 15) {
-        colName = `Meta Mensual - ${months[colIndex - 4]}`;
-        val = `${row.meses[colIndex - 4] || "0"} ${row.tipo === "Porcentual" ? "%" : "unidades"}`;
-      } else if (colIndex === 16) {
-        colName = "Total de Meta";
-        val = `${calculateTotal(row.meses).toLocaleString()} ${row.tipo === "Porcentual" ? "%" : "unidades"}`;
-      } else if (colIndex === 17) {
-        colName = "Acción de Fila";
-        val = row.isMandatory ? "Celda Obligatoria" : "Eliminar Fila";
-      }
-
-      return { rowNum, rowName, colName, val, isBudget: false };
-    } else {
-      const row = rows[rowIndex];
-      if (!row) return null;
-
-      const rpIndex = resultadosPrincipales.findIndex(rp => rp.id === row.resultadoPrincipalId);
-      const rpRows = rows.filter(r => r.resultadoPrincipalId === row.resultadoPrincipalId);
-      const relativeIndex = rpRows.findIndex(r => r.id === row.id);
-      const rpName = resultadosPrincipales[rpIndex]?.resultado || `Resultado Principal ${rpIndex + 1}`;
-
-      const rowNum = `${rpIndex + 1}.${relativeIndex + 1}`;
-      const rowName = row.producto || "Resultado Intermedio (Sin definir)";
-
-      let colName = "";
-      let val = "";
-      if (colIndex === 0) {
-        colName = "Número de Fila";
-        val = rowNum;
-      } else if (colIndex === 1) {
-        colName = "Resultado Principal";
-        val = rpName;
-      } else if (colIndex === 2) {
-        colName = "Resultado Intermedio";
-        val = rowName;
-      } else if (colIndex === 3) {
-        colName = "Presupuesto Asignado";
-        const amount = Number(row.presupuesto) || 0;
-        val = `Bs. ${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      }
-
-      return { rowNum, rowName, colName, val, isBudget: true };
-    }
-  };
-
-  const modalRow = rows.find(r => r.id === modalEditRowId);
-  const modalAbsoluteIndex = rows.findIndex(r => r.id === modalEditRowId);
-  const modalRp = modalRow ? resultadosPrincipales.find(rp => rp.id === modalRow.resultadoPrincipalId) : null;
-  const modalRpIndex = modalRp ? resultadosPrincipales.findIndex(rp => rp.id === modalRp.id) : -1;
-  const modalRpRows = modalRow ? rows.filter(r => r.resultadoPrincipalId === modalRow.resultadoPrincipalId) : [];
-  const modalRelativeIndex = modalRow ? modalRpRows.findIndex(r => r.id === modalRow.id) : -1;
-  const modalRowNum = modalRpIndex !== -1 && modalRelativeIndex !== -1 ? `${modalRpIndex + 1}.${modalRelativeIndex + 1}` : "";
-
   // Dynamic widths selection based on zoom scale
   const widthClass = colWidths[zoomLevel];
 
   return (
     <div className="w-full space-y-6 relative">
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 md:p-6 shadow-sm space-y-6">
         <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
           <div className="max-w-2xl">
             <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
@@ -584,52 +618,60 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
               3. Matriz de Ejecución e Ingresos/Egresos
             </h2>
             <p className="text-slate-500 text-sm mt-2">
-              Defina los resultados intermedios asociados. Use flechas para navegar y Enter para editar. Haga clic en la lupa (🔍) en el N° de fila para abrir la edición accesible.
+              Defina los resultados intermedios asociados. Use flechas para navegar y Enter para editar.
             </p>
           </div>
           
           {/* Action Dock (Zoom + export PDF) */}
-          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto">
+          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto justify-between xl:justify-start">
             {/* Font Zoom controls */}
-            <div className="bg-slate-50 p-1.5 rounded-xl flex items-center border border-slate-200 gap-1.5 shadow-inner">
+            <div className="bg-slate-50 p-1.5 rounded-xl flex items-center border border-slate-200 gap-1.5 shadow-inner w-full sm:w-auto justify-between sm:justify-start">
               <span className="text-xs font-bold text-slate-500 px-2.5 uppercase select-none tracking-wider font-sans">Zoom</span>
-              <button
-                onClick={() => setZoomLevel("normal")}
-                className={cn(
-                  "px-3 py-1 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer",
-                  zoomLevel === "normal" ? "bg-white text-primary shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/50"
-                )}
-                title="Tamaño normal"
-              >
-                A
-              </button>
-              <button
-                onClick={() => setZoomLevel("large")}
-                className={cn(
-                  "px-3 py-1 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer",
-                  zoomLevel === "large" ? "bg-white text-primary shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/50"
-                )}
-                title="Tamaño grande"
-              >
-                A+
-              </button>
-              <button
-                onClick={() => setZoomLevel("xlarge")}
-                className={cn(
-                  "px-3 py-1 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer",
-                  zoomLevel === "xlarge" ? "bg-white text-primary shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/50"
-                )}
-                title="Tamaño muy grande"
-              >
-                A++
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setZoomLevel("normal")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer",
+                    zoomLevel === "normal" ? "bg-white text-primary shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/50"
+                  )}
+                  title="Tamaño normal"
+                >
+                  A
+                </button>
+                <button
+                  onClick={() => setZoomLevel("large")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer",
+                    zoomLevel === "large" ? "bg-white text-primary shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/50"
+                  )}
+                  title="Tamaño grande"
+                >
+                  A+
+                </button>
+                <button
+                  onClick={() => setZoomLevel("xlarge")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-sm font-bold transition-all duration-200 cursor-pointer",
+                    zoomLevel === "xlarge" ? "bg-white text-primary shadow-sm border border-slate-200" : "text-slate-600 hover:bg-slate-200/50"
+                  )}
+                  title="Tamaño muy grande"
+                >
+                  A++
+                </button>
+              </div>
             </div>
             
             <button
               onClick={handleExportPdf}
-              className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 px-4 py-2.5 rounded-xl transition-all text-sm font-bold shadow-sm active:scale-95 cursor-pointer ml-auto xl:ml-0"
+              className="flex items-center justify-center gap-2 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 px-4 py-2.5 rounded-xl transition-all text-sm font-bold shadow-sm active:scale-95 cursor-pointer w-full sm:w-auto"
             >
               <FileText className="w-4 h-4 text-secondary" /> Generar PDF
+            </button>
+            <button
+              onClick={handleExportExcel}
+              className="flex items-center justify-center gap-2 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 px-4 py-2.5 rounded-xl transition-all text-sm font-bold shadow-sm active:scale-95 cursor-pointer w-full sm:w-auto"
+            >
+              <Download className="w-4 h-4 text-emerald-600" /> Exportar Excel
             </button>
           </div>
         </div>
@@ -660,70 +702,7 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
         </div>
       </div>
 
-      {/* Active Cell HUD */}
-      {(() => {
-        const hud = getHudDetails();
-        return (
-          <div className={cn(
-            "bg-white border shadow-md rounded-2xl overflow-hidden transition-all duration-300 ring-4 ring-offset-2",
-            hud 
-              ? (hud.isBudget ? "border-emerald-300 ring-emerald-100" : "border-primary/40 ring-primary/5") 
-              : "border-slate-200 ring-transparent"
-          )}>
-            {!hud ? (
-              <div className="p-5 flex items-center gap-3 bg-slate-50/60 text-slate-500 text-sm font-medium">
-                <Info className="w-5 h-5 text-primary/70 animate-pulse shrink-0" />
-                <span>Modo de visualización asistida activo. Haga clic en cualquier celda para ver sus datos con zoom de alta visibilidad.</span>
-              </div>
-            ) : (
-              <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
-                {/* Left side: Context details & Description */}
-                <div className="flex-1 p-6 flex flex-col justify-between gap-4">
-                  <div className="space-y-3.5">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className={cn(
-                        "px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase shadow-sm border",
-                        hud.isBudget 
-                          ? "bg-emerald-100 border-emerald-300 text-emerald-800" 
-                          : "bg-primary text-white border-primary"
-                      )}>
-                        {hud.isBudget ? "Techo Presupuestario" : "Meta Física / Ejecución"}
-                      </span>
-                      <span className="bg-slate-100 border border-slate-200 px-3 py-1 rounded-full text-xs font-bold text-slate-700 font-mono">
-                        Ubicación: Fila {hud.rowNum}
-                      </span>
-                      <span className="bg-slate-100 border border-slate-200 px-3 py-1 rounded-full text-xs font-bold text-slate-700">
-                        Columna: {hud.colName}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Descripción del Resultado Intermedio</p>
-                      <p className="text-slate-800 font-extrabold text-lg md:text-xl leading-relaxed">
-                        {hud.rowName}
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                <div className={cn(
-                  "p-6 lg:w-[320px] flex flex-col justify-center items-center lg:items-end shrink-0 select-all transition-colors",
-                  hud.isBudget ? "bg-emerald-50/50" : "bg-primary/5"
-                )}>
-                  <div 
-                    className={cn(
-                      "font-black tracking-tight font-mono drop-shadow-sm py-2 text-center lg:text-right w-full break-all",
-                      hud.isBudget ? "text-emerald-800" : "text-primary"
-                    )}
-                    style={{ fontSize: "4.5rem", lineHeight: "1" }}
-                  >
-                    {hud.val}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      })()}
 
       <div className="space-y-8">
         {resultadosPrincipales.map((rp, rpIndex) => {
@@ -746,8 +725,8 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
                   </div>
                   <div className="p-3 bg-slate-50 border-t border-slate-300">
                     <button
-                      onClick={() => addRowGroup(rp.id)}
-                      className="flex items-center gap-2 bg-white text-primary border border-primary px-3 py-1.5 rounded-md hover:bg-primary hover:text-white transition-colors text-sm font-bold shadow-sm"
+                      onClick={() => openAddModal(rp.id)}
+                      className="flex items-center gap-2 bg-white text-primary border border-primary px-3 py-1.5 rounded-md hover:bg-primary hover:text-white transition-colors text-sm font-bold shadow-sm cursor-pointer"
                     >
                       <Plus className="w-4 h-4" /> Agregar Resultado Intermedio
                     </button>
@@ -756,7 +735,10 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
               ) : (
                 <div className="flex flex-col gap-6">
                   <div className={cn("overflow-x-auto transition-all duration-200", zoomClass[zoomLevel])}>
-                    <table className="w-full border-collapse table-fixed">
+                    <table 
+                      className="w-full border-collapse table-fixed"
+                      style={{ minWidth: zoomLevel === "normal" ? "1080px" : zoomLevel === "large" ? "1300px" : "1600px" }}
+                    >
                       <thead>
                         <tr className="bg-slate-50 text-slate-700 border-b border-slate-200">
                           <th className={cn(
@@ -838,23 +820,8 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
                                   rowActive ? "text-emerald-900 bg-emerald-100/50" : "text-slate-500"
                                 ))}
                               >
-                                <div className="relative group flex items-center justify-center gap-1.5">
+                                <div className="flex items-center justify-center gap-1.5">
                                   <span className="font-bold">{rpIndex + 1}.{relativeIndex + 1}</span>
-                                  <button
-                                    tabIndex={-1}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setModalEditRowId(row.id);
-                                    }}
-                                    className="text-primary hover:text-white hover:bg-primary p-1 rounded transition-colors"
-                                    title="Abrir editor de metas mensual en grande"
-                                  >
-                                    <ZoomIn className="w-3.5 h-3.5" />
-                                  </button>
-                                  {/* Custom CSS Hover Tooltip */}
-                                  <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover:block bg-slate-805 text-slate-800 text-sm font-bold py-1 px-2 rounded shadow-md border border-slate-200 bg-white whitespace-nowrap z-50 pointer-events-none transition-all">
-                                    Editor vertical accesible (mes a mes)
-                                  </span>
                                 </div>
                               </td>
 
@@ -1097,8 +1064,8 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
                   </div>
                   <div className="p-3 bg-slate-50 border-t border-slate-300">
                     <button
-                      onClick={() => addRowGroup(rp.id)}
-                      className="flex items-center gap-2 bg-white text-primary border border-primary px-3 py-1.5 rounded-md hover:bg-primary hover:text-white transition-colors text-sm font-bold shadow-sm"
+                      onClick={() => openAddModal(rp.id)}
+                      className="flex items-center gap-2 bg-white text-primary border border-primary px-3 py-1.5 rounded-md hover:bg-primary hover:text-white transition-colors text-sm font-bold shadow-sm cursor-pointer"
                     >
                       <Plus className="w-4 h-4" /> Agregar Resultado Intermedio
                     </button>
@@ -1128,70 +1095,229 @@ export function Step3Matriz({ resultadosPrincipales, rows, addRowGroup, removeRo
         triggerWarning={triggerWarning}
       />
 
-      {/* Vertical Accessibility Month Modal Editor */}
-      {modalEditRowId && modalRow && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-
-            {/* Header */}
-            <div className="bg-primary text-white px-6 py-4 flex justify-between items-center">
+      {/* Modal Accesible de Agregar Resultado Intermedio */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 accessible-modal-content">
+            {/* Cabecera */}
+            <div className="bg-slate-50 border-b border-slate-200 px-6 py-5 flex justify-between items-center">
               <div>
-                <h3 className="font-bold text-lg">
-                  🔍 Editor Accesible de Metas - Fila {modalRowNum}
+                <h3 className="font-extrabold text-slate-800 text-2xl flex items-center gap-2 font-serif">
+                  <Target className="w-7 h-7 text-primary" /> Agregar Resultado Intermedio Accesible
                 </h3>
-                <p className="text-slate-200 text-sm mt-0.5">
-                  Ingrese los valores mensuales de forma cómoda. Los cambios se guardan automáticamente.
+                <p className="text-slate-500 text-sm mt-1">
+                  Seleccione una plantilla rápida preconfigurada o redacte un resultado propio con letra grande y clara.
                 </p>
               </div>
               <button
-                onClick={() => setModalEditRowId(null)}
-                className="text-white hover:bg-white/10 rounded-full p-1.5 transition-colors font-bold"
+                onClick={() => setIsAddModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full p-2 transition-colors cursor-pointer flex items-center justify-center"
+                title="Cerrar modal"
               >
-                ✕
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            {/* Row Details */}
-            <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 space-y-1">
-              <p className="text-sm font-bold text-primary uppercase tracking-wide">Resultado Intermedio</p>
-              <p className="text-sm font-semibold text-slate-800">{modalRow.producto || modalRow.productoSelect || "Sin definir"}</p>
-              <p className="text-sm text-slate-500 font-medium">Tipo: {modalRow.tipo} | Indicador: {modalRow.indicador || "N/A"}</p>
+            {/* Selector de Opción Excluyente */}
+            <div className="px-6 pt-4 pb-1 bg-slate-50 border-b border-slate-200">
+              <div className="flex bg-slate-200/50 p-1.5 rounded-xl border border-slate-200 gap-1.5 shadow-inner">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveOption("plantilla");
+                    setSelectedTemplateIndex(null);
+                  }}
+                  className={cn(
+                    "flex-grow flex items-center justify-center gap-2 py-3 rounded-lg text-base font-bold transition-all duration-200 cursor-pointer text-center",
+                    activeOption === "plantilla"
+                      ? "bg-white text-primary shadow-sm"
+                      : "text-slate-550 text-slate-500 hover:bg-white/50"
+                  )}
+                >
+                  <ClipboardList className="w-5 h-5 text-primary" /> Opciones Estandarizadas (Plantilla Rápida)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveOption("personalizado");
+                    setSelectedTemplateIndex(null);
+                    setCustomResult({ producto: "", indicador: "", tipo: "Absoluto" });
+                  }}
+                  className={cn(
+                    "flex-grow flex items-center justify-center gap-2 py-3 rounded-lg text-base font-bold transition-all duration-200 cursor-pointer text-center",
+                    activeOption === "personalizado"
+                      ? "bg-white text-primary shadow-sm"
+                      : "text-slate-550 text-slate-500 hover:bg-white/50"
+                  )}
+                >
+                  <Edit3 className="w-5 h-5 text-primary" /> Crear Resultado Personalizado (Desde Cero)
+                </button>
+              </div>
             </div>
 
-            {/* Scrollable inputs */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 max-h-[50vh]">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {months.map((m, mIndex) => (
-                  <div key={m} className="flex flex-col gap-1 border border-slate-200 rounded-lg p-3 bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                    <label className="text-sm font-bold text-slate-700 flex justify-between">
-                      <span>{mIndex + 1}. {m} (Mes)</span>
-                      <span className="text-sm text-slate-400 font-normal">{modalRow.tipo === "Porcentual" ? "%" : "meta"}</span>
-                    </label>
-                    <input
-                      type="number"
-                      className="w-full p-2.5 border border-slate-300 rounded-md text-lg font-bold text-primary focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-white shadow-sm"
-                      value={modalRow.meses[mIndex]}
-                      placeholder="0"
-                      onChange={(e) => handleUpdateMonth(modalAbsoluteIndex, mIndex, e.target.value)}
-                    />
+            {/* Contenido principal con scroll */}
+            <div className="flex-1 overflow-y-auto p-6">
+              
+              {activeOption === "plantilla" ? (
+                /* BLOQUE A: PLANTILLAS RÁPIDAS */
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h4 className="text-lg font-black text-primary uppercase tracking-wider font-serif">
+                      Seleccione una Plantilla Rápida
+                    </h4>
+                    {/* Buscador grande */}
+                    <div className="relative w-full sm:w-64">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <Search className="h-5 w-5 text-slate-400" />
+                      </span>
+                      <input
+                        type="text"
+                        placeholder="Buscar plantilla..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 pr-4 py-2.5 border-2 border-slate-200 rounded-xl text-base outline-none focus:border-primary w-full shadow-sm"
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {filteredTemplates.map((template) => {
+                      const isSelected = selectedTemplateIndex === template.originalIndex;
+                      return (
+                        <div
+                          key={template.nombre}
+                          onClick={() => {
+                            setSelectedTemplateIndex(template.originalIndex);
+                          }}
+                          className={cn(
+                            "border-2 rounded-2xl p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between h-full hover:shadow-md active:scale-98 select-none",
+                            isSelected
+                              ? "border-emerald-500 bg-emerald-50/50 shadow-inner ring-2 ring-emerald-500/20"
+                              : "border-slate-200 bg-white hover:border-slate-300"
+                          )}
+                        >
+                          <div>
+                            <p className="text-lg font-black text-slate-800 leading-snug">
+                              {template.nombre}
+                            </p>
+                            <div className="mt-3 space-y-1.5 text-sm text-slate-600 font-medium">
+                              <p className="flex items-center gap-1.5">
+                                <BarChart3 className="w-4 h-4 text-slate-400" />
+                                <span>Indicador: <strong>{template.indicador}</strong></span>
+                              </p>
+                              <p className="flex items-center gap-1.5">
+                                <Settings className="w-4 h-4 text-slate-400" />
+                                <span>Tipo de Meta: <strong>{template.tipo}</strong></span>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mt-4 flex justify-end">
+                            <span className={cn(
+                              "px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm",
+                              isSelected
+                                ? "bg-emerald-600 text-white"
+                                : "bg-slate-100 text-slate-500"
+                            )}>
+                              {isSelected ? "Seleccionado ✓" : "Seleccionar"}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {filteredTemplates.length === 0 && (
+                      <div className="col-span-full p-8 text-center text-slate-400 italic">
+                        No se encontraron plantillas coincidentes.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                /* BLOQUE B: CREACIÓN PERSONALIZADA */
+                <div className="space-y-5 bg-slate-50/50 rounded-2xl p-6 border border-slate-200">
+                  <h4 className="text-lg font-black text-primary uppercase tracking-wider font-serif">
+                    Redacte un Resultado Propio
+                  </h4>
+                  
+                  <div className="space-y-4">
+                    {/* Producto Description */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wide">
+                        Descripción del Resultado Intermedio
+                      </label>
+                      <textarea
+                        placeholder="Redacte la descripción del resultado de forma clara..."
+                        value={customResult.producto}
+                        onChange={(e) => handleCustomChange("producto", e.target.value)}
+                        className="p-3.5 border-2 border-slate-200 rounded-xl text-lg font-medium outline-none focus:border-primary bg-white shadow-sm min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20"
+                      />
+                    </div>
+
+                    {/* Indicador */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wide">
+                        Indicador de Proceso
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Ej: Porcentaje de trámites atendidos, Informes aprobados, etc."
+                        value={customResult.indicador}
+                        onChange={(e) => handleCustomChange("indicador", e.target.value)}
+                        className="p-3 border-2 border-slate-200 rounded-xl text-base outline-none focus:border-primary bg-white shadow-sm focus:ring-2 focus:ring-primary/20"
+                      />
+                    </div>
+
+                    {/* Tipo de Meta - Botones de Toggle */}
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wide">
+                        Tipo de Meta
+                      </label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <button
+                          type="button"
+                          onClick={() => handleCustomChange("tipo", "Absoluto")}
+                          className={cn(
+                            "flex items-center justify-center gap-2 py-4 rounded-xl border-2 font-bold text-lg transition-all duration-150 cursor-pointer text-center outline-none focus:ring-2 focus:ring-primary/20",
+                            customResult.tipo === "Absoluto"
+                              ? "border-primary bg-primary/5 text-primary shadow-sm"
+                              : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
+                          )}
+                        >
+                          <Hash className="w-5 h-5 text-primary" /> Meta Absoluta (Unidades)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleCustomChange("tipo", "Porcentual")}
+                          className={cn(
+                            "flex items-center justify-center gap-2 py-4 rounded-xl border-2 font-bold text-lg transition-all duration-150 cursor-pointer text-center outline-none focus:ring-2 focus:ring-primary/20",
+                            customResult.tipo === "Porcentual"
+                              ? "border-primary bg-primary/5 text-primary shadow-sm"
+                              : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
+                          )}
+                        >
+                          <Percent className="w-5 h-5 text-primary" /> Meta Porcentual (%)
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Footer */}
-            <div className="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-between items-center">
-              <div>
-                <span className="text-sm font-bold text-slate-500 uppercase tracking-wide">Total Programado:</span>
-                <p className="text-lg font-extrabold text-primary">
-                  {calculateTotal(modalRow.meses).toLocaleString()}{modalRow.tipo === "Porcentual" ? "%" : ""}
-                </p>
-              </div>
+            {/* Pie de página */}
+            <div className="bg-slate-50 border-t border-slate-200 px-6 py-4 flex justify-end gap-3 shrink-0">
               <button
-                onClick={() => setModalEditRowId(null)}
-                className="bg-primary hover:bg-primary/90 text-white font-bold px-6 py-2.5 rounded-lg shadow-sm transition-colors text-sm"
+                type="button"
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-6 py-3 border border-slate-300 rounded-xl text-base font-bold text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               >
-                Listo (Cerrar)
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmAdd}
+                className="px-8 py-3 bg-primary text-white rounded-xl text-base font-bold hover:bg-primary/95 transition-all shadow-md hover:shadow-lg cursor-pointer"
+              >
+                Agregar Resultado
               </button>
             </div>
           </div>
