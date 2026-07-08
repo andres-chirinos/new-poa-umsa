@@ -97,6 +97,14 @@ label, span, small, time, placeholder, input::placeholder, textarea::placeholder
   font-size: 14px !important;
 }
 
+/* Especificidad mayor para el modal de accesibilidad de personas mayores */
+.accessible-modal-content input,
+.accessible-modal-content textarea,
+.accessible-modal-content select,
+.accessible-modal-content button {
+  font-size: 18px !important;
+}
+
 /* EXCLUSIÓN DE LOS REPORTES DE LOS PDF:
    La vista previa y exportación se generan de forma programática en formato binario (Blob)
    usando la API interna de jsPDF/pdf-lib, por lo que estas reglas CSS de renderizado web

@@ -1,0 +1,13 @@
+Agregar en el 3 un modal agregar resultado intermedio un modal que ocupe la pantalla para que puedan ver con mas opciones cargado o incluso que puedana jalar desde el modal para que sea mas accesible
+"Correcciones"
+
+
+Traspasos presupuestarios y vinculado a SIGEP SI O SI
+Sacar un monto del punto de partida y llevar el presupuesto pequenio llevar a otra opcion.
+
+Compatibilidad con SIGEP y SIFU o el propio sistema
+
+
+
+
+Conexion con SAGITARIO - 

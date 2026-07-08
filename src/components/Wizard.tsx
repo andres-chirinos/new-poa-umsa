@@ -10,6 +10,7 @@ import { Step1Articulacion } from "./Step1Articulacion";
 import { Step2Programacion } from "./Step2Programacion";
 import { Step3Matriz, resultadosEstandarizados } from "./Step3Matriz";
 import { Step4DetalleFinanciero } from "./Step4DetalleFinanciero";
+import { exportToExcel } from "@/lib/excelExport";
 
 const pasos = [
   { id: 1, title: "Articulación PEI-POA", desc: "Alineación Estratégica" },
@@ -82,11 +83,20 @@ export function Wizard() {
   };
 
   // Spreadsheet Logic (Step 3)
-  const addRowGroup = (resultadoPrincipalId: string) => {
+  const addRowGroup = (resultadoPrincipalId: string, prefilledData?: Partial<RowData>) => {
     const newId = Date.now().toString();
     setRows([
       ...rows,
-      { id: newId + "-M", resultadoPrincipalId, productoSelect: "", producto: "", indicador: "", tipo: "Absoluto", meses: Array(12).fill(""), presupuesto: "" }
+      { 
+        id: newId + "-M", 
+        resultadoPrincipalId, 
+        productoSelect: prefilledData?.productoSelect || "", 
+        producto: prefilledData?.producto || "", 
+        indicador: prefilledData?.indicador || "", 
+        tipo: prefilledData?.tipo || "Absoluto", 
+        meses: Array(12).fill(""), 
+        presupuesto: "" 
+      }
     ]);
     setDetalles(prev => [
       ...prev,
@@ -523,6 +533,10 @@ export function Wizard() {
     link.click();
   };
 
+  const handleExportExcel = () => {
+    exportToExcel(resultadosPrincipales, rows, detalles, formData);
+  };
+
   const handleClosePdfModal = () => {
     setShowPdfModal(false);
     if (pdfBlobUrl) {
@@ -589,6 +603,7 @@ export function Wizard() {
             updateRow={updateRow} 
             updateMonth={updateMonth} 
             handleExportPdf={handleExportPdf}
+            handleExportExcel={handleExportExcel}
           />
         )}
         {currentStep === 4 && (
@@ -600,6 +615,7 @@ export function Wizard() {
             removeDetalle={removeDetalle}
             updateDetalle={updateDetalle}
             handleExportPdf={handleExportPdf}
+            handleExportExcel={handleExportExcel}
           />
         )}
       </div>

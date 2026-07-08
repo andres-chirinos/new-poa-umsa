@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { DetalleFinanciero, RowData, ResultadoPrincipal } from "@/types/poa";
-import { Plus, Trash2, FileText } from "lucide-react";
+import { Plus, Trash2, FileText, Download } from "lucide-react";
 import partidasData from "@/partidas.json";
 import { cn } from "@/lib/utils";
 
@@ -16,9 +16,10 @@ interface Props {
   removeDetalle: (id: string) => void;
   updateDetalle: (id: string, field: keyof DetalleFinanciero, value: string) => void;
   handleExportPdf: () => void;
+  handleExportExcel: () => void;
 }
 
-export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, addDetalle, removeDetalle, updateDetalle, handleExportPdf }: Props) {
+export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, addDetalle, removeDetalle, updateDetalle, handleExportPdf, handleExportExcel }: Props) {
   // Navigation grid state: tracks active cell inside step 4 tables
   const [activeCell, setActiveCell] = useState<{
     resultId: string;
@@ -70,11 +71,31 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
   }, [detalles]);
 
   // Focus a specific cell td in step 4 tables
-  const focusCell = (resultId: string, rowIndex: number, colIndex: number) => {
-    setActiveCell({ resultId, rowIndex, colIndex, isEditing: false });
+  const focusCell = (resultId: string, rowIndex: number, colIndex: number, startEditing: boolean = false) => {
+    setActiveCell({ resultId, rowIndex, colIndex, isEditing: startEditing });
     setTimeout(() => {
-      const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
-      cellEl?.focus();
+      if (startEditing) {
+        const resDetalles = detalles.filter(d => d.resultadoId === resultId);
+        const detail = resDetalles[rowIndex];
+        if (detail) {
+          const inputEl = document.getElementById(`input-detail-${detail.id}-${colIndex + 1}`);
+          if (inputEl) {
+            inputEl.focus();
+            if (inputEl instanceof HTMLInputElement) {
+              inputEl.select();
+            } else if (inputEl instanceof HTMLSelectElement && typeof (inputEl as any).showPicker === "function") {
+              try {
+                (inputEl as any).showPicker();
+              } catch (err) {
+                console.error("showPicker failed:", err);
+              }
+            }
+          }
+        }
+      } else {
+        const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
+        cellEl?.focus();
+      }
     }, 0);
   };
 
@@ -163,6 +184,76 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
           }
         }, 0);
         break;
+      default:
+        // Support typing normal characters directly to begin editing on editable fields
+        if (
+          ((e.key >= "0" && e.key <= "9") ||
+            (e.key >= "a" && e.key <= "z") ||
+            (e.key >= "A" && e.key <= "Z") ||
+            e.key === "." ||
+            e.key === "-") &&
+          !e.ctrlKey &&
+          !e.altKey &&
+          !e.metaKey
+        ) {
+          const detail = resDetalles[rowIndex];
+          if (!detail) break;
+
+          e.preventDefault();
+          setActiveCell({ resultId, rowIndex, colIndex, isEditing: true });
+
+          if (colIndex === 0) {
+            const newValue = e.key;
+            updateDetalle(detail.id, "detalle", newValue);
+            const partidaCode = newValue.split(" - ")[0];
+            if (partidaCode && !isNaN(Number(partidaCode))) {
+              updateDetalle(detail.id, "partida", partidaCode);
+            } else {
+              updateDetalle(detail.id, "partida", "");
+            }
+            setHighlightedIndex(-1);
+            setTimeout(() => {
+              const inputEl = document.getElementById(`input-detail-${detail.id}-1`) as HTMLInputElement | null;
+              if (inputEl) {
+                inputEl.focus();
+                inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+              }
+            }, 0);
+          } else if (colIndex === 1) {
+            setTimeout(() => {
+              const selectEl = document.getElementById(`input-detail-${detail.id}-2`) as HTMLSelectElement | null;
+              if (selectEl) {
+                selectEl.focus();
+                if (typeof (selectEl as any).showPicker === "function") {
+                  try {
+                    (selectEl as any).showPicker();
+                  } catch (err) {}
+                }
+              }
+            }, 0);
+          } else if (colIndex === 2) {
+            if ((e.key >= "0" && e.key <= "9") || e.key === ".") {
+              updateDetalle(detail.id, "precioUnitario", e.key);
+              setTimeout(() => {
+                const inputEl = document.getElementById(`input-detail-${detail.id}-3`) as HTMLInputElement | null;
+                if (inputEl) {
+                  inputEl.focus();
+                }
+              }, 0);
+            }
+          } else if (colIndex === 3) {
+            if (e.key >= "0" && e.key <= "9") {
+              updateDetalle(detail.id, "cantidad", e.key);
+              setTimeout(() => {
+                const inputEl = document.getElementById(`input-detail-${detail.id}-4`) as HTMLInputElement | null;
+                if (inputEl) {
+                  inputEl.focus();
+                }
+              }, 0);
+            }
+          }
+        }
+        break;
     }
   };
 
@@ -216,12 +307,18 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
         const cellEl = document.getElementById(`cell-detail-${resultId}-${rowIndex}-${colIndex}`);
         cellEl?.focus();
         
-        // Excel behavior: move down one cell
+        // Excel behavior: move right to the next column (like Tab) and start editing
         setTimeout(() => {
-          if (rowIndex < resDetalles.length - 1) {
-            focusCell(resultId, rowIndex + 1, colIndex);
+          if (colIndex === 3 && rowIndex === resDetalles.length - 1) {
+            const btn = document.getElementById(`btn-add-detail-${resultId}`);
+            btn?.focus();
+            setActiveCell(null);
+          } else if (colIndex < 3) {
+            focusCell(resultId, rowIndex, colIndex + 1, true);
+          } else if (rowIndex < resDetalles.length - 1) {
+            focusCell(resultId, rowIndex + 1, 0, true);
           }
-        }, 0);
+        }, 50);
       }, 0);
     } else if (e.key === "Escape") {
       e.preventDefault();
@@ -240,9 +337,9 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
         setTimeout(() => {
           if (e.shiftKey) {
             if (colIndex > 0) {
-              focusCell(resultId, rowIndex, colIndex - 1);
+              focusCell(resultId, rowIndex, colIndex - 1, true);
             } else if (rowIndex > 0) {
-              focusCell(resultId, rowIndex - 1, 3);
+              focusCell(resultId, rowIndex - 1, 3, true);
             }
           } else {
             if (colIndex === 3 && rowIndex === resDetalles.length - 1) {
@@ -250,9 +347,9 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
               btn?.focus();
               setActiveCell(null);
             } else if (colIndex < 3) {
-              focusCell(resultId, rowIndex, colIndex + 1);
+              focusCell(resultId, rowIndex, colIndex + 1, true);
             } else if (rowIndex < resDetalles.length - 1) {
-              focusCell(resultId, rowIndex + 1, 0);
+              focusCell(resultId, rowIndex + 1, 0, true);
             }
           }
         }, 0);
@@ -318,6 +415,12 @@ export function Step4DetalleFinanciero({ resultadosPrincipales, rows, detalles, 
             className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-md hover:bg-slate-100 transition-colors text-sm font-bold shadow-sm"
           >
             <FileText className="w-4 h-4 text-secondary" /> Generar PDF
+          </button>
+          <button 
+            onClick={handleExportExcel}
+            className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-md hover:bg-slate-100 transition-colors text-sm font-bold shadow-sm active:scale-95 cursor-pointer"
+          >
+            <Download className="w-4 h-4 text-emerald-600" /> Exportar Excel
           </button>
         </div>
       </div>

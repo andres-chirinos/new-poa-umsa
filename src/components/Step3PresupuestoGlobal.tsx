@@ -98,7 +98,10 @@ export function Step3PresupuestoGlobal({
         </p>
       </div>
       <div className={cn("overflow-x-auto transition-all duration-200", zoomClass[zoomLevel])}>
-        <table className="w-full border-collapse table-fixed">
+        <table 
+          className="w-full border-collapse table-fixed"
+          style={{ minWidth: zoomLevel === "normal" ? "800px" : zoomLevel === "large" ? "950px" : "1150px" }}
+        >
           <thead>
             <tr className="bg-emerald-50 text-emerald-800 border-b border-emerald-200">
               <th className={cn(
